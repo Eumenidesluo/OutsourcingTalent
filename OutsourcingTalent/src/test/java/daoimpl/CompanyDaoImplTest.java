@@ -7,27 +7,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import dao.PersonalInfDao;
-import entity.PersonalInfEntity;
+import dao.CompanyDao;
+import entity.CompanyEntity;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:/META_INF/applicationContext.xml")
-public class PersonalInfDaoImplTest{
+public class CompanyDaoImplTest {
 
 	@Autowired
-	PersonalInfDao personalInfDao;
+	CompanyDao companyDao;
 	@Before
 	public void setUp() throws Exception {
 	}
 
 	@Test
-	public void testUpdate() {
-		PersonalInfEntity entity = new PersonalInfEntity();
-		entity.setEmail("1481726071@qq.com");
-		entity.setName("aaaa");
-		System.out.println(entity);
-		personalInfDao.update(entity);
-		System.out.println("success");
+	public void testAddCompany() {
+		CompanyEntity companyEntity = new CompanyEntity();
+		companyEntity.setName("alibaba");
+		companyDao.addCompany(companyEntity);
+	}
+
+	@Test
+	public void testDeleteCompany() {
+	}
+
+	@Test
+	public void testUpdateCompany() {
+	}
+
+	@Test
+	public void testFindCompanyById() {
+	}
+
+	@Test
+	public void testFindComaniesByName() {
 	}
 
 }

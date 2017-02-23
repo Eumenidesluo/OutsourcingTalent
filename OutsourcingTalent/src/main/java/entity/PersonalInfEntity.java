@@ -1,10 +1,22 @@
 package entity;
 
-import javax.persistence.*;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import component.Sex;
 
 /**
- * Created by Eumenides on 2017/2/19.
+ * Created by Eumenides on 2017/2/22.
  */
 @Entity
 @Table(name = "personal_inf", schema = "outsourcingtalent", catalog = "")
@@ -18,7 +30,29 @@ public class PersonalInfEntity {
     private String school;
     private String major;
     private String phoneNumber;
-    private String sex;
+    private Sex sex;
+
+    private UserEntity userEntityByEmail;
+    
+    public PersonalInfEntity() {
+		email = "";
+		name = "";
+		address = "";
+		education = "";
+		graduationTime = "";
+		school = "";
+		major = "";
+		phoneNumber = "";
+		sex = Sex.man;
+		SimpleDateFormat bartDateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+		try {      
+			java.util.Date date = bartDateFormat.parse("9999-12-31");  
+			Date sqldate = new Date(date.getTime());
+			birthday = sqldate;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 
     @Id
     @Column(name = "email")
@@ -111,12 +145,13 @@ public class PersonalInfEntity {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "sex")
-    public String getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -142,18 +177,13 @@ public class PersonalInfEntity {
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        int result = email != null ? email.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (address != null ? address.hashCode() : 0);
-        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
-        result = 31 * result + (education != null ? education.hashCode() : 0);
-        result = 31 * result + (graduationTime != null ? graduationTime.hashCode() : 0);
-        result = 31 * result + (school != null ? school.hashCode() : 0);
-        result = 31 * result + (major != null ? major.hashCode() : 0);
-        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
-        result = 31 * result + (sex != null ? sex.hashCode() : 0);
-        return result;
+    @OneToOne
+    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
+    public UserEntity getUserEntityByEmail(){
+        return userEntityByEmail;
+    }
+
+    public void setUserEntityByEmail(UserEntity userEntityByEmail) {
+        this.userEntityByEmail = userEntityByEmail;
     }
 }

@@ -4,8 +4,8 @@ package component;
  * Created by Eumenides on 2017/2/19.
  */
 public enum Sex {
-    male("man"),
-    female("woman");
+    man("man"),
+    female("female");
 
     private String name;
     private Sex(String name){

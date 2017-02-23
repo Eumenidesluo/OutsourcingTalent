@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+  <context:component-scan base-package="entity,controller,service,dao,daoimpl,component,serviceimpl"/>
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8"/>
+    <property name="username" value="root"/>
+    <property name="password" value="chenqi11545"/>
+  </bean>
+
+  <!-- 配置SessionFactory -->
+  <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.format_sql">true</prop>
+        <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8</prop>
+        <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+      </props>
+    </property>
+    <property name="annotatedClasses">
+      <list>
+        <value>entity.UserEntity</value>
+        <value>entity.PersonalInfEntity</value>
+        <value>entity.CoRecruitEntity</value>
+        <value>entity.CollectUserRecruitEntity</value>
+        <value>entity.CompanyEntity</value>
+        <value>entity.GroupEntity</value>
+        <value>entity.ProjectEntity</value>
+        <value>entity.ReEducationEntity</value>
+        <value>entity.ReEvaluationEntity</value>
+        <value>entity.ReInternshipEntity</value>
+        <value>entity.ReSchoolExpEntity</value>
+        <value>entity.ReScienceEntity</value>
+        <value>entity.RelateGroupProjectEntity</value>
+        <value>entity.ResumeEntity</value>
+        <value>entity.SelectUserRecruitEntity</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="transactionBase"
+        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"
+        lazy-init="true" abstract="true">
+
+    <property name="transactionManager" ref="transactionManager" />
+ 
+    <property name="transactionAttributes">
+      <props>
+        <prop key="*">PROPAGATION_REQUIRED</prop>
+      </props>
+    </property>
+  </bean>
+  
+	<bean id="personalInfDaoTarget" class="daoimpl.PersonalInfDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+
+  <bean id="personalInfDao" parent="transactionBase">
+    <property name="target" ref="personalInfDaoTarget"/>
+  </bean>
+
+  <bean id="userDaoTarget" class="daoimpl.UserDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="userDao" parent="transactionBase">
+    <property name="target" ref="userDaoTarget"/>
+  </bean> 
+  
+  <bean id="resumeDaoTarget" class="daoimpl.ResumeDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="resumeDao" parent="transactionBase">
+    <property name="target" ref="resumeDaoTarget"/>
+  </bean>
+  
+  <bean id="reEducationDaoTarget" class="daoimpl.ReEducationDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="reEducationDao" parent="transactionBase">
+    <property name="target" ref="reEducationDaoTarget"/>
+  </bean>
+  
+  <bean id="reEvaluationDaoTarget" class="daoimpl.ReEvaluationDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="reEvaluationDao" parent="transactionBase">
+    <property name="target" ref="reEvaluationDaoTarget"/>
+  </bean>
+  
+  <bean id="reInternshipDaoTarget" class="daoimpl.ReInternshipDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="reInternshipDao" parent="transactionBase">
+    <property name="target" ref="reInternshipDaoTarget"/>
+  </bean>
+  
+  <bean id="reSchoolExpDaoTarget" class="daoimpl.ReSchoolExpDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="reSchoolExpDao" parent="transactionBase">
+    <property name="target" ref="reSchoolExpDaoTarget"/>
+  </bean>
+  
+  <bean id="reScienceDaoTarget" class="daoimpl.ReScienceDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="reScienceDao" parent="transactionBase">
+    <property name="target" ref="reScienceDaoTarget"/>
+  </bean> 
+  
+  <bean id="companyDaoTarget" class="daoimpl.CompanyDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="companyDao" parent="transactionBase">
+    <property name="target" ref="companyDaoTarget"/>
+  </bean>
+  
+  <bean id="coRecruitDaoTarget" class="daoimpl.CoRecruitDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="coRecruitDao" parent="transactionBase">
+    <property name="target" ref="coRecruitDaoTarget"/>
+  </bean>
+  
+  <bean id="collectDaoTarget" class="daoimpl.CollectDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="collectDao" parent="transactionBase">
+    <property name="target" ref="collectDaoTarget"/>
+  </bean>
+  
+  <bean id="selectDaoTarget" class="daoimpl.SelectDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="selectDao" parent="transactionBase">
+    <property name="target" ref="selectDaoTarget"/>
+  </bean>
+  
+  <bean id="groupDaoTarget" class="daoimpl.GroupDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="groupDao" parent="transactionBase">
+    <property name="target" ref="groupDaoTarget"/>
+  </bean>
+  
+  <bean id="projectDaoTarget" class="daoimpl.ProjectDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="projectDao" parent="transactionBase">
+    <property name="target" ref="projectDaoTarget"/>
+  </bean>
+  
+  <bean id="relateGPDaoTarget" class="daoimpl.RelateGPDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="relateGPDao" parent="transactionBase">
+    <property name="target" ref="relateGPDaoTarget"/>
+  </bean>
+  
+  <bean id="uGRelateDaoTarget" class="daoimpl.UGRelateDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="uGRelateDao" parent="transactionBase">
+    <property name="target" ref="uGRelateDaoTarget"/>
+  </bean>
+
+  <bean id="sendEmail" class="serviceimpl.SendEmailImpl"/>
+
+</beans>

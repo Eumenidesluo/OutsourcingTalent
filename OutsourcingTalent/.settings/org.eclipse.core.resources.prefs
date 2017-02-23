@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/main/java/controller/RegisterController.java=UTF-8
+encoding//src/main/java/serviceimpl/RegisterValidateImpl.java=UTF-8
+encoding//src/main/java/serviceimpl/SendEmailImpl.java=UTF-8
+encoding//src/main/resources/META_INF/applicationContext.xml=UTF-8

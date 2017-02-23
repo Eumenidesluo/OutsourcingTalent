@@ -1,12 +1,18 @@
 package entity;
 
-import javax.persistence.*;
-import java.util.Date;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
- * Created by Eumenides on 2017/2/19.
+ * Created by Eumenides on 2017/2/22.
  */
 @Entity
 @Table(name = "user", schema = "outsourcingtalent", catalog = "")
@@ -18,6 +24,8 @@ public class UserEntity {
     private String validateCode;
     private Timestamp registerTime;
 //    private PersonalInfEntity personalInfByEmail;
+//    private CollectUserRecruitEntity collectUserRecruitById;
+//    private SelectUserRecruitEntity selectUserRecruitById;
 
     @Id
     @Column(name = "id")
@@ -107,14 +115,23 @@ public class UserEntity {
         return result;
     }
 
-//    @OneToOne
-//    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
-//    public PersonalInfEntity getPersonalInfByEmail() {
-//        return personalInfByEmail;
+
+//    @OneToOne(mappedBy = "userByUserId")
+//    public CollectUserRecruitEntity getCollectUserRecruitById() {
+//        return collectUserRecruitById;
 //    }
 //
-//    public void setPersonalInfByEmail(PersonalInfEntity personalInfByEmail) {
-//        this.personalInfByEmail = personalInfByEmail;
+//    public void setCollectUserRecruitById(CollectUserRecruitEntity collectUserRecruitById) {
+//        this.collectUserRecruitById = collectUserRecruitById;
+//    }
+//
+//    @OneToOne(mappedBy = "userByUserId")
+//    public SelectUserRecruitEntity getSelectUserRecruitById() {
+//        return selectUserRecruitById;
+//    }
+//
+//    public void setSelectUserRecruitById(SelectUserRecruitEntity selectUserRecruitById) {
+//        this.selectUserRecruitById = selectUserRecruitById;
 //    }
 
     @Transient
@@ -122,6 +139,7 @@ public class UserEntity {
         Calendar cl = Calendar.getInstance();
         cl.setTime(registerTime);
         cl.add(Calendar.DATE , 2);
+
         return cl.getTime();
     }
 }

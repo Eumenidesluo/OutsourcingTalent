@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import dao.PersonalInfDao;
 import entity.PersonalInfEntity;
+import service.PersonalInfService;
 @Service("personalInfService")
-public class PersonalInfServiceImpl {
+public class PersonalInfServiceImpl implements PersonalInfService{
 
 	@Autowired
 	PersonalInfDao personalInfDao;
@@ -55,6 +56,11 @@ public class PersonalInfServiceImpl {
 		}
 			
 	
+	}
+	@Override
+	public Boolean updatePersonInformation(String json) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
