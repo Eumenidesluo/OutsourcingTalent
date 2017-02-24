@@ -1,7 +1,14 @@
 package entity;
 
-import javax.persistence.*;
 import java.sql.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Eumenides on 2017/2/22.
@@ -10,6 +17,7 @@ import java.sql.Date;
 @Table(name = "re_internship", schema = "outsourcingtalent", catalog = "")
 public class ReInternshipEntity {
     private int internshipId;
+    private int resumeId;
     private String company;
     private String position;
     private Date startTime;
@@ -18,6 +26,7 @@ public class ReInternshipEntity {
     private String describe;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "InternshipId")
     public int getInternshipId() {
         return internshipId;
@@ -28,6 +37,16 @@ public class ReInternshipEntity {
     }
 
     @Basic
+    @Column(name = "resumeId")
+    public int getResumeId() {
+		return resumeId;
+	}
+
+	public void setResumeId(int resumeId) {
+		this.resumeId = resumeId;
+	}
+
+	@Basic
     @Column(name = "company")
     public String getCompany() {
         return company;
@@ -87,33 +106,66 @@ public class ReInternshipEntity {
         this.describe = describe;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((describe == null) ? 0 : describe.hashCode());
+		result = prime * result + ((endtime == null) ? 0 : endtime.hashCode());
+		result = prime * result + internshipId;
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + resumeId;
+		result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
+		return result;
+	}
 
-        ReInternshipEntity that = (ReInternshipEntity) o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReInternshipEntity other = (ReInternshipEntity) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
+			return false;
+		if (describe == null) {
+			if (other.describe != null)
+				return false;
+		} else if (!describe.equals(other.describe))
+			return false;
+		if (endtime == null) {
+			if (other.endtime != null)
+				return false;
+		} else if (!endtime.equals(other.endtime))
+			return false;
+		if (internshipId != other.internshipId)
+			return false;
+		if (position == null) {
+			if (other.position != null)
+				return false;
+		} else if (!position.equals(other.position))
+			return false;
+		if (resumeId != other.resumeId)
+			return false;
+		if (startTime == null) {
+			if (other.startTime != null)
+				return false;
+		} else if (!startTime.equals(other.startTime))
+			return false;
+		return true;
+	}
 
-        if (internshipId != that.internshipId) return false;
-        if (company != null ? !company.equals(that.company) : that.company != null) return false;
-        if (position != null ? !position.equals(that.position) : that.position != null) return false;
-        if (startTime != null ? !startTime.equals(that.startTime) : that.startTime != null) return false;
-        if (endtime != null ? !endtime.equals(that.endtime) : that.endtime != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (describe != null ? !describe.equals(that.describe) : that.describe != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = internshipId;
-        result = 31 * result + (company != null ? company.hashCode() : 0);
-        result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (startTime != null ? startTime.hashCode() : 0);
-        result = 31 * result + (endtime != null ? endtime.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (describe != null ? describe.hashCode() : 0);
-        return result;
-    }
+    
 }

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alibaba.fastjson.JSON;
+
 import dao.ResumeDao;
 import entity.ResumeEntity;
 
@@ -22,6 +24,12 @@ public class ResumeDaoImplTest {
 
 	@Test
 	public void testSaveResume() {
+		ResumeEntity entity = new ResumeEntity();
+		entity.setUserId(1);
+		entity.setPhone("15988425431");
+		System.out.println(resumeDao.saveResume(entity));
+		System.out.println(JSON.toJSON(entity));
+//		resumeDao.saveResume(entity);
 		
 		
 	}
@@ -32,9 +40,7 @@ public class ResumeDaoImplTest {
 
 	@Test
 	public void testUpdateResume() {
-		ResumeEntity entity = resumeDao.findResume(1);
-		entity.setPhone("15988425431");
-		resumeDao.updateResume(entity);
+		
 	}
 
 }

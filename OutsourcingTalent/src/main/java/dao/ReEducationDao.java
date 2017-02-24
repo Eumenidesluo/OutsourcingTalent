@@ -5,10 +5,10 @@ import java.util.List;
 import entity.ReEducationEntity;
 
 public interface ReEducationDao {
-	public void addEducation(ReEducationEntity educationEntity);
-	public void deleteEducation(ReEducationDao educationEntityDao);
+	public Integer addEducation(ReEducationEntity educationEntity);
+	public Boolean deleteEducation(ReEducationEntity educationEntity);
 	public List<?> findEducationsByResumeId(int ReusmeId);
-	public void updateEducation(ReEducationEntity entity);
+	public Boolean updateEducation(ReEducationEntity entity);
 	public ReEducationEntity findByEducationId(int EducationId);
 	
 }

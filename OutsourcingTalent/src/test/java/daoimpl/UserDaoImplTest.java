@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alibaba.fastjson.JSON;
+
 import component.MD5Util;
 import dao.BaseTestInterface;
 import dao.UserDao;
@@ -32,9 +34,13 @@ public class UserDaoImplTest implements BaseTestInterface{
 		entity.setEmail("1481726071@qq.com");
 		entity.setPassword("12345");
 		entity.setStatus(0);
-		entity.setRegisterTime(new java.sql.Timestamp(System.currentTimeMillis()));
+//		entity.setRegisterTime(new java.sql.Timestamp(System.currentTimeMillis()));
 		entity.setValidateCode(MD5Util.encode2hex("1481726071@qq.com"));
-		userDao.save(entity);
+		String json = JSON.toJSONString(entity);
+		System.out.println(json);
+		entity = JSON.parseObject(json,UserEntity.class);
+		System.out.println(entity.getPassword());
+//		userDao.save(entity);
 	}
 
 

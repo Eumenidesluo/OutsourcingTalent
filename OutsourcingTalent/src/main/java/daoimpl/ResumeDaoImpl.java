@@ -1,5 +1,7 @@
 package daoimpl;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
@@ -11,38 +13,33 @@ public class ResumeDaoImpl extends HibernateDaoSupport implements ResumeDao {
 	 public void setSuperSessionFactory(SessionFactory sessionFactory){
 	        super.setSessionFactory(sessionFactory);
 	    }
-	@Override
-	public void saveResume(ResumeEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer saveResume(ResumeEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
+		
+		
 	}
 
-	public void deleteResume(int resumeId) {
-		ResumeEntity deleteEntity = (ResumeEntity)getHibernateTemplate().find("from ResumeEntity where resumeId=?", resumeId).get(0);
-		getHibernateTemplate().delete(deleteEntity);
+	public Boolean deleteResume(int resumeId) {
+		try {
+			ResumeEntity deleteEntity = (ResumeEntity)getHibernateTemplate().find("from ResumeEntity where resumeId=?", resumeId).get(0);
+			getHibernateTemplate().delete(deleteEntity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 
 	}
 
 	public void updateResume(ResumeEntity entity) {
-//		try {
-//			Session session = getSessionFactory().openSession();
-//			session.beginTransaction();
-//			ResumeEntity entity2 = (ResumeEntity)getHibernateTemplate().find("from ResumeEntity e where e.userId=?", entity.getUserId()).get(0);
-//			entity2 = entity;
-//			getSessionFactory().openSession().beginTransaction().commit();
-////		getHibernateTemplate().update(entity);
-//		} catch (DataAccessException e) {
-//			e.printStackTrace();
-//		} catch (HibernateException e) {
-//			e.printStackTrace();
-//		}finally {
-//			getSessionFactory().openSession().close();
-//		}
 		getHibernateTemplate().update(entity);
 		
 	}
-	public ResumeEntity findResume(int userId) {
-		return (ResumeEntity)getHibernateTemplate().find("from ResumeEntity e where e.userId=?", userId).get(0);
+	public List<?> findResume(int userId) {
+		return getHibernateTemplate().find("from ResumeEntity e where e.userId=?", userId);
 	}
 	
+	public ResumeEntity findResumeById(int id){
+		return (ResumeEntity)getHibernateTemplate().find("from ResumeEntity e where e.resumeId=?", id).get(0);
+	}
 
 }

@@ -14,27 +14,32 @@ public class ReScienceDaoImpl extends HibernateDaoSupport implements ReScienceDa
         super.setSessionFactory(sessionFactory);
     }
 	
-	@Override
-	public void addScience(ReScienceEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addScience(ReScienceEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
-	@Override
-	public void deleteScience(ReScienceEntity entity) {
-		getHibernateTemplate().delete(entity);
+	public Boolean deleteScience(ReScienceEntity entity) {
+		try {
+			getHibernateTemplate().delete(entity);
+		} catch( Exception e) {
+			return false;
+		}
+		return true;
 	}
 
-	@Override
-	public void updateScience(ReScienceEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateScience(ReScienceEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
-	@Override
 	public ReScienceEntity findScienceByScienceId(int scienceId) {
 		return (ReScienceEntity)getHibernateTemplate().find("from ReScienceEntity e where e.scienceId=?", scienceId).get(0);
 	}
 
-	@Override
 	public List<?> findSciencesByResumeId(int resumeId) {
 		return getHibernateTemplate().find("from ReScienceEntity e where e.resumeId=?", resumeId);
 	}

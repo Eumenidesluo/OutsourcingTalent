@@ -1,6 +1,12 @@
 package entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Eumenides on 2017/2/22.
@@ -9,6 +15,7 @@ import javax.persistence.*;
 @Table(name = "re_science", schema = "outsourcingtalent", catalog = "")
 public class ReScienceEntity {
     private int scienceId;
+    private int resumeId;
     private String project;
     private String position;
     private String start;
@@ -17,6 +24,7 @@ public class ReScienceEntity {
     private String description;
 
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "scienceId")
     public int getScienceId() {
         return scienceId;
@@ -27,6 +35,16 @@ public class ReScienceEntity {
     }
 
     @Basic
+    @Column(name = "resumeId")
+    public int getResumeId() {
+		return resumeId;
+	}
+
+	public void setResumeId(int resumeId) {
+		this.resumeId = resumeId;
+	}
+
+	@Basic
     @Column(name = "project")
     public String getProject() {
         return project;
@@ -86,33 +104,65 @@ public class ReScienceEntity {
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + ((end == null) ? 0 : end.hashCode());
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
+		result = prime * result + resumeId;
+		result = prime * result + scienceId;
+		result = prime * result + ((start == null) ? 0 : start.hashCode());
+		return result;
+	}
 
-        ReScienceEntity that = (ReScienceEntity) o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ReScienceEntity other = (ReScienceEntity) obj;
+		if (city == null) {
+			if (other.city != null)
+				return false;
+		} else if (!city.equals(other.city))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (end == null) {
+			if (other.end != null)
+				return false;
+		} else if (!end.equals(other.end))
+			return false;
+		if (position == null) {
+			if (other.position != null)
+				return false;
+		} else if (!position.equals(other.position))
+			return false;
+		if (project == null) {
+			if (other.project != null)
+				return false;
+		} else if (!project.equals(other.project))
+			return false;
+		if (resumeId != other.resumeId)
+			return false;
+		if (scienceId != other.scienceId)
+			return false;
+		if (start == null) {
+			if (other.start != null)
+				return false;
+		} else if (!start.equals(other.start))
+			return false;
+		return true;
+	}
 
-        if (scienceId != that.scienceId) return false;
-        if (project != null ? !project.equals(that.project) : that.project != null) return false;
-        if (position != null ? !position.equals(that.position) : that.position != null) return false;
-        if (start != null ? !start.equals(that.start) : that.start != null) return false;
-        if (end != null ? !end.equals(that.end) : that.end != null) return false;
-        if (city != null ? !city.equals(that.city) : that.city != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = scienceId;
-        result = 31 * result + (project != null ? project.hashCode() : 0);
-        result = 31 * result + (position != null ? position.hashCode() : 0);
-        result = 31 * result + (start != null ? start.hashCode() : 0);
-        result = 31 * result + (end != null ? end.hashCode() : 0);
-        result = 31 * result + (city != null ? city.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        return result;
-    }
 }

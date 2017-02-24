@@ -3,6 +3,7 @@ package daoimpl;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.ReInternshipDao;
@@ -13,33 +14,32 @@ public class ReInternshipDaoImpl extends HibernateDaoSupport implements ReIntern
 	public void setSuperSessionFactory(SessionFactory sessionFactory){
         super.setSessionFactory(sessionFactory);
     }
-	@Override
-	public void addInternship(ReInternshipEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addInternship(ReInternshipEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
-	@Override
-	public void deleteInternship(ReInternshipEntity entity) {
-		getHibernateTemplate().delete(entity);
+	public Boolean deleteInternship(ReInternshipEntity entity) {
+		try {
+			getHibernateTemplate().delete(entity);
+		} catch (DataAccessException e) {
+			return false;
+		}
+		return true;
 	}
 
-	@Override
 	public List<?> findInternshipsByResumeId(int resumeId) {
 		return getHibernateTemplate().find("from ReInternshipEntity e where e.resumeId=?", resumeId);
 	}
 
-	@Override
 	public ReInternshipEntity findInternshipByinternshioId(int internshipId) {
 		return (ReInternshipEntity)getHibernateTemplate().find("from ReInternshipEntity e where e.internshipId=?", internshipId).get(0);
 	}
 
-	@Override
 	public void deleteInternshipByInternshipId(int internshipId) {
 		ReInternshipEntity entity = findInternshipByinternshioId(internshipId);
 		deleteInternship(entity);
 	}
 
-	@Override
 	public void deleteInternshipsByResumeId(int resumeId) {
 		List<?> internships = findInternshipsByResumeId(resumeId);
 		for (Object object:internships){
@@ -49,9 +49,13 @@ public class ReInternshipDaoImpl extends HibernateDaoSupport implements ReIntern
 		}
 	}
 
-	@Override
-	public void updateInternship(ReInternshipEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateInternship(ReInternshipEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }

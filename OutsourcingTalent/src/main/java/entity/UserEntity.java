@@ -7,6 +7,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -27,7 +29,11 @@ public class UserEntity {
 //    private CollectUserRecruitEntity collectUserRecruitById;
 //    private SelectUserRecruitEntity selectUserRecruitById;
 
+    public UserEntity() {
+    	registerTime = new Timestamp(0);
+    }
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -115,24 +121,6 @@ public class UserEntity {
         return result;
     }
 
-
-//    @OneToOne(mappedBy = "userByUserId")
-//    public CollectUserRecruitEntity getCollectUserRecruitById() {
-//        return collectUserRecruitById;
-//    }
-//
-//    public void setCollectUserRecruitById(CollectUserRecruitEntity collectUserRecruitById) {
-//        this.collectUserRecruitById = collectUserRecruitById;
-//    }
-//
-//    @OneToOne(mappedBy = "userByUserId")
-//    public SelectUserRecruitEntity getSelectUserRecruitById() {
-//        return selectUserRecruitById;
-//    }
-//
-//    public void setSelectUserRecruitById(SelectUserRecruitEntity selectUserRecruitById) {
-//        this.selectUserRecruitById = selectUserRecruitById;
-//    }
 
     @Transient
     public Date getLastActivateTime() {

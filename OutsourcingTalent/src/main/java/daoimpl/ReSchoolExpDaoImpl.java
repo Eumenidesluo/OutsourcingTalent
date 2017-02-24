@@ -14,27 +14,32 @@ public class ReSchoolExpDaoImpl extends HibernateDaoSupport implements ReSchoolE
         super.setSessionFactory(sessionFactory);
     }
 	
-	@Override
-	public void addSchoolExp(ReSchoolExpEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addSchoolExp(ReSchoolExpEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
-	@Override
-	public void deleteSchoolExp(ReSchoolExpEntity entity) {
-		getHibernateTemplate().delete(entity);
+	public Boolean deleteSchoolExp(ReSchoolExpEntity entity) {
+		try {
+			getHibernateTemplate().delete(entity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
-	@Override
-	public void updateSchoolExp(ReSchoolExpEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateSchoolExp(ReSchoolExpEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
-	@Override
 	public ReSchoolExpEntity findExpBySchoolExpId(int schoolExpId) {
 		return (ReSchoolExpEntity)getHibernateTemplate().find("from ReSchoolExpEntity e where e.schoolExpId=?", schoolExpId).get(0);
 	}
 
-	@Override
 	public List<?> findExpsByResumeId(int resumeId) {
 		return getHibernateTemplate().find("from ReSchoolExpEntity e where e.resumeId=?", resumeId);
 	}

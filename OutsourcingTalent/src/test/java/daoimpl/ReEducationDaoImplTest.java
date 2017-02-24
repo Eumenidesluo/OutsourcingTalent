@@ -36,7 +36,7 @@ public class ReEducationDaoImplTest {
 
 	@Test
 	public void testUpdateEducation() {
-		ReEducationEntity educationEntity = reEducationDao.findByEducationId(2);
+		ReEducationEntity educationEntity = reEducationDao.findByEducationId(1);
 		educationEntity.setSchool("HDU");
 		reEducationDao.updateEducation(educationEntity);
 	}

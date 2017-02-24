@@ -11,8 +11,8 @@ public class ReEvaluationDaoImpl extends HibernateDaoSupport implements ReEvalua
 	public void setSuperSessionFactory(SessionFactory sessionFactory){
         super.setSessionFactory(sessionFactory);
     }
-	public void addEvaluation(ReEvaluationEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addEvaluation(ReEvaluationEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
 	public void deleteEvaluation(int resumeId) {

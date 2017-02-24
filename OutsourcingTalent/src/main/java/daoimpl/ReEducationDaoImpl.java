@@ -3,6 +3,7 @@ package daoimpl;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.ReEducationDao;
@@ -13,21 +14,31 @@ public class ReEducationDaoImpl extends HibernateDaoSupport implements ReEducati
 	public void setSuperSessionFactory(SessionFactory sessionFactory){
         super.setSessionFactory(sessionFactory);
     }
-	public void addEducation(ReEducationEntity educationEntity) {
-		getHibernateTemplate().save(educationEntity);
+	public Integer addEducation(ReEducationEntity educationEntity) {
+		return (Integer)getHibernateTemplate().save(educationEntity);
 	}
 
-	public void deleteEducation(ReEducationDao educationEntityDao) {
-		getHibernateTemplate().delete(educationEntityDao);
+	public Boolean deleteEducation(ReEducationEntity educationEntity) {
+		try {
+			getHibernateTemplate().delete(educationEntity);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
 	}
 
-	public List<?> findEducationsByResumeId(int reusmeId) {
-		return getHibernateTemplate().find("from ReEducationEntity e where e.resumeId=?", reusmeId);
+	public List<?> findEducationsByResumeId(int resumeId) {
+		return getHibernateTemplate().find("from ReEducationEntity e where e.resumeId=?", resumeId);
 		
 	}
 
-	public void updateEducation(ReEducationEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateEducation(ReEducationEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (DataAccessException e) {
+			return false;
+		}
+		return true;
 	}
 
 	public ReEducationEntity findByEducationId(int educationId) {
