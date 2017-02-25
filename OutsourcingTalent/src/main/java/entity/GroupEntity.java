@@ -25,7 +25,12 @@ public class GroupEntity {
     private Integer memberId7;
     private Integer memberId8;
     private Integer memberId9;
+    private Integer amount;
 
+    public GroupEntity() {
+    	amount = 0;
+	}
+    
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "groupId")
@@ -137,41 +142,103 @@ public class GroupEntity {
         this.memberId9 = memberId9;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    @Basic
+    @Column(name = "amount")
+	public Integer getAmount() {
+		return amount;
+	}
 
-        GroupEntity that = (GroupEntity) o;
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
 
-        if (groupId != that.groupId) return false;
-        if (leaderId != null ? !leaderId.equals(that.leaderId) : that.leaderId != null) return false;
-        if (memberId1 != null ? !memberId1.equals(that.memberId1) : that.memberId1 != null) return false;
-        if (memberId2 != null ? !memberId2.equals(that.memberId2) : that.memberId2 != null) return false;
-        if (memberId3 != null ? !memberId3.equals(that.memberId3) : that.memberId3 != null) return false;
-        if (memberId4 != null ? !memberId4.equals(that.memberId4) : that.memberId4 != null) return false;
-        if (memberId5 != null ? !memberId5.equals(that.memberId5) : that.memberId5 != null) return false;
-        if (memberId6 != null ? !memberId6.equals(that.memberId6) : that.memberId6 != null) return false;
-        if (memberId7 != null ? !memberId7.equals(that.memberId7) : that.memberId7 != null) return false;
-        if (memberId8 != null ? !memberId8.equals(that.memberId8) : that.memberId8 != null) return false;
-        if (memberId9 != null ? !memberId9.equals(that.memberId9) : that.memberId9 != null) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+		result = prime * result + groupId;
+		result = prime * result + ((leaderId == null) ? 0 : leaderId.hashCode());
+		result = prime * result + ((memberId1 == null) ? 0 : memberId1.hashCode());
+		result = prime * result + ((memberId2 == null) ? 0 : memberId2.hashCode());
+		result = prime * result + ((memberId3 == null) ? 0 : memberId3.hashCode());
+		result = prime * result + ((memberId4 == null) ? 0 : memberId4.hashCode());
+		result = prime * result + ((memberId5 == null) ? 0 : memberId5.hashCode());
+		result = prime * result + ((memberId6 == null) ? 0 : memberId6.hashCode());
+		result = prime * result + ((memberId7 == null) ? 0 : memberId7.hashCode());
+		result = prime * result + ((memberId8 == null) ? 0 : memberId8.hashCode());
+		result = prime * result + ((memberId9 == null) ? 0 : memberId9.hashCode());
+		return result;
+	}
 
-        return true;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GroupEntity other = (GroupEntity) obj;
+		if (amount == null) {
+			if (other.amount != null)
+				return false;
+		} else if (!amount.equals(other.amount))
+			return false;
+		if (groupId != other.groupId)
+			return false;
+		if (leaderId == null) {
+			if (other.leaderId != null)
+				return false;
+		} else if (!leaderId.equals(other.leaderId))
+			return false;
+		if (memberId1 == null) {
+			if (other.memberId1 != null)
+				return false;
+		} else if (!memberId1.equals(other.memberId1))
+			return false;
+		if (memberId2 == null) {
+			if (other.memberId2 != null)
+				return false;
+		} else if (!memberId2.equals(other.memberId2))
+			return false;
+		if (memberId3 == null) {
+			if (other.memberId3 != null)
+				return false;
+		} else if (!memberId3.equals(other.memberId3))
+			return false;
+		if (memberId4 == null) {
+			if (other.memberId4 != null)
+				return false;
+		} else if (!memberId4.equals(other.memberId4))
+			return false;
+		if (memberId5 == null) {
+			if (other.memberId5 != null)
+				return false;
+		} else if (!memberId5.equals(other.memberId5))
+			return false;
+		if (memberId6 == null) {
+			if (other.memberId6 != null)
+				return false;
+		} else if (!memberId6.equals(other.memberId6))
+			return false;
+		if (memberId7 == null) {
+			if (other.memberId7 != null)
+				return false;
+		} else if (!memberId7.equals(other.memberId7))
+			return false;
+		if (memberId8 == null) {
+			if (other.memberId8 != null)
+				return false;
+		} else if (!memberId8.equals(other.memberId8))
+			return false;
+		if (memberId9 == null) {
+			if (other.memberId9 != null)
+				return false;
+		} else if (!memberId9.equals(other.memberId9))
+			return false;
+		return true;
+	}
 
-    @Override
-    public int hashCode() {
-        int result = groupId;
-        result = 31 * result + (leaderId != null ? leaderId.hashCode() : 0);
-        result = 31 * result + (memberId1 != null ? memberId1.hashCode() : 0);
-        result = 31 * result + (memberId2 != null ? memberId2.hashCode() : 0);
-        result = 31 * result + (memberId3 != null ? memberId3.hashCode() : 0);
-        result = 31 * result + (memberId4 != null ? memberId4.hashCode() : 0);
-        result = 31 * result + (memberId5 != null ? memberId5.hashCode() : 0);
-        result = 31 * result + (memberId6 != null ? memberId6.hashCode() : 0);
-        result = 31 * result + (memberId7 != null ? memberId7.hashCode() : 0);
-        result = 31 * result + (memberId8 != null ? memberId8.hashCode() : 0);
-        result = 31 * result + (memberId9 != null ? memberId9.hashCode() : 0);
-        return result;
-    }
+    
 }

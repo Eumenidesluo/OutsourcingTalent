@@ -12,8 +12,8 @@ public class GroupDaoImpl extends HibernateDaoSupport implements GroupDao {
         super.setSessionFactory(sessionFactory);
     }
 	
-	public void addGroup(GroupEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addGroup(GroupEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
 	public void deleteGroup(GroupEntity entity) {
