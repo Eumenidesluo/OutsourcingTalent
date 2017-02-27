@@ -3,6 +3,7 @@ package daoimpl;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.ProjectDao;
@@ -14,16 +15,28 @@ public class ProjectDaoImpl extends HibernateDaoSupport implements ProjectDao {
         super.setSessionFactory(sessionFactory);
     }
 	
-	public void addProject(ProjectEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addProject(ProjectEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
-	public void deleteProject(ProjectEntity entity) {
-		getHibernateTemplate().delete(entity);
+	public Boolean deleteProject(ProjectEntity entity) {
+		try {
+			getHibernateTemplate().delete(entity);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
-	public void updateProject(ProjectEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateProject(ProjectEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public ProjectEntity findProjectByProjectId(int projectId) {

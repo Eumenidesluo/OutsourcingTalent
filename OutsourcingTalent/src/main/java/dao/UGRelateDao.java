@@ -11,4 +11,5 @@ public interface UGRelateDao {
 	public void update(RelateUserGroupEntity entity);
 	public List<?> findRelatesByUserId(int userId);
 	public List<?> findRelatesByGroupId(int groupId);
+	public RelateUserGroupEntity findRelate(Integer userId,Integer groupId);
 }

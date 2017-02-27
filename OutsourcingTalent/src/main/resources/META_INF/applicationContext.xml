@@ -52,6 +52,7 @@
         <value>entity.RelateGroupProjectEntity</value>
         <value>entity.ResumeEntity</value>
         <value>entity.SelectUserRecruitEntity</value>
+        <value>entity.ProjectStatusEntity</value>
       </list>
     </property>
   </bean>
@@ -185,6 +186,32 @@
   <bean id="uGRelateDao" parent="transactionBase">
     <property name="target" ref="uGRelateDaoTarget"/>
   </bean>
+  
+  <bean id="projectStatusDaoTarget" class="daoimpl.ProjectStatusDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="projectStatusDao" parent="transactionBase">
+    <property name="target" ref="projectStatusDaoTarget"/>
+  </bean>
+  
+  <bean id="projectStatusServiceTarget" class="serviceimpl.ProjectStatusServiceImpl">
+  	<property name="projectStatusDao" ref="projectStatusDaoTarget"></property>
+  	<property name="relateGPDao" ref="relateGPDao"></property>
+  </bean>
+  <bean id="projectStatusService" parent="transactionBase">
+    <property name="target" ref="projectStatusServiceTarget"/>
+  </bean>
+  
+  <bean id="groupServiceTarget" class="serviceimpl.GroupServiceImpl">
+  	<property name="groupDao" ref="groupDaoTarget"></property>
+  	<property name="userDao" ref="userDaoTarget"></property>
+  	<property name="ugRelateDao" ref="uGRelateDaoTarget"></property>
+  </bean>
+  <bean id="groupService" parent="transactionBase">
+    <property name="target" ref="groupServiceTarget"/>
+  </bean>
+  
+  
 
   <bean id="sendEmail" class="serviceimpl.SendEmailImpl"/>
 

@@ -34,4 +34,7 @@ public class UGRelateDaoImpl extends HibernateDaoSupport implements UGRelateDao 
 		return getHibernateTemplate().find("from RelateUserGroupEntity e where e.groupId=?", groupId);
 	}
 
+	public RelateUserGroupEntity findRelate(Integer userId,Integer groupId){
+		return (RelateUserGroupEntity)getHibernateTemplate().find("from RelateUserGroupEntity e where e.groupId=? and e.userId=?", groupId,userId).get(0);
+	}
 }

@@ -1,7 +1,12 @@
 package entity;
 
-import javax.persistence.*;
 import java.sql.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by Eumenides on 2017/2/22.
@@ -10,9 +15,10 @@ import java.sql.Date;
 @Table(name = "select_user_recruit", schema = "outsourcingtalent", catalog = "")
 public class SelectUserRecruitEntity {
     private int userId;
+    private int recruitId;
     private int status;
+    
     private Date time;
-    private CoRecruitEntity coRecruitByRecruitId;
 
     @Id
     @Column(name = "userId")
@@ -23,8 +29,19 @@ public class SelectUserRecruitEntity {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
+    
+    
     @Basic
+    @Column(name = "recruitId")
+    public int getRecruitId() {
+		return recruitId;
+	}
+
+	public void setRecruitId(int recruitId) {
+		this.recruitId = recruitId;
+	}
+
+	@Basic
     @Column(name = "status")
     public int getStatus() {
         return status;
@@ -44,35 +61,40 @@ public class SelectUserRecruitEntity {
         this.time = time;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + recruitId;
+		result = prime * result + status;
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result + userId;
+		return result;
+	}
 
-        SelectUserRecruitEntity that = (SelectUserRecruitEntity) o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SelectUserRecruitEntity other = (SelectUserRecruitEntity) obj;
+		if (recruitId != other.recruitId)
+			return false;
+		if (status != other.status)
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
+		if (userId != other.userId)
+			return false;
+		return true;
+	}
 
-        if (userId != that.userId) return false;
-        if (status != that.status) return false;
-        if (time != null ? !time.equals(that.time) : that.time != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = userId;
-        result = 31 * result + status;
-        result = 31 * result + (time != null ? time.hashCode() : 0);
-        return result;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "recruitId", referencedColumnName = "recruitId", nullable = false)
-    public CoRecruitEntity getCoRecruitByRecruitId() {
-        return coRecruitByRecruitId;
-    }
-
-    public void setCoRecruitByRecruitId(CoRecruitEntity coRecruitByRecruitId) {
-        this.coRecruitByRecruitId = coRecruitByRecruitId;
-    }
+    
+  
 }

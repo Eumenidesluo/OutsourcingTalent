@@ -33,7 +33,6 @@ public class RegisterController {
         System.out.println("-----r----"+action);
 
         if("register".equals(action)) {
-            //娉ㄥ唽
             String email = request.getParameter("email");
             if (userDao.isEmailUnique(email)==1){
                 RegisterValidate registerValidate=(RegisterValidate) SpringContextHolder.getBean("registerValidate");
@@ -47,12 +46,10 @@ public class RegisterController {
                 return "the email has been registered";
         }
         else if("activate".equals(action)) {
-            //婵�娲�
-            String email = request.getParameter("email");//鑾峰彇email
-            String validateCode = request.getParameter("validateCode");//婵�娲荤爜
+            String email = request.getParameter("email");
+            String validateCode = request.getParameter("validateCode");
 
             try {
-                //璋冪敤婵�娲绘柟娉�
                 service.processActivate(email,validateCode);
             } catch (ServiceException e) {
                 request.setAttribute("message" , e.getMessage());

@@ -2,25 +2,54 @@ package serviceimpl;
 
 import java.lang.reflect.Method;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import dao.GroupDao;
+import dao.UGRelateDao;
 import dao.UserDao;
 import entity.GroupEntity;
+import entity.RelateUserGroupEntity;
 import service.GroupService;
 
-@Service("groupService")
 public class GroupServiceImpl implements GroupService{
 
-	@Autowired
 	GroupDao groupDao;
-	@Autowired
 	UserDao userDao;
+	UGRelateDao ugRelateDao;
+	
+	
+	public UGRelateDao getUgRelateDao() {
+		return ugRelateDao;
+	}
+
+	public void setUgRelateDao(UGRelateDao ugRelateDao) {
+		this.ugRelateDao = ugRelateDao;
+	}
+
+	public GroupDao getGroupDao() {
+		return groupDao;
+	}
+
+	public void setGroupDao(GroupDao groupDao) {
+		this.groupDao = groupDao;
+	}
+
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
 	public Integer createGroup(Integer creatorId) {
 		GroupEntity groupEntity = new GroupEntity();
 		groupEntity.setLeaderId(creatorId);
-		return groupDao.addGroup(groupEntity);
+		RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
+		Integer groupId =  groupDao.addGroup(groupEntity);
+		relateEntity.setUserId(creatorId);
+		relateEntity.setGroupId(groupId);
+		relateEntity.setIndex(0);
+		ugRelateDao.addRelate(relateEntity);
+		return groupId;
 		
 	}
 	
@@ -34,16 +63,21 @@ public class GroupServiceImpl implements GroupService{
 		if (number > 9||number < 1){
 			return false;
 		}
-		
-		if (addMember(groupEntity, inviteId)){
+		Integer index = addMember(groupEntity, inviteId);
+		if (index != -1){
 			groupDao.updateGroup(groupEntity);
+			RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
+			relateEntity.setGroupId(groupId);
+			relateEntity.setUserId(inviteId);
+			relateEntity.setIndex(1);
+			ugRelateDao.addRelate(relateEntity);
 			return true;
 		}
 		
 		return false;
 	}
 	
-	private Boolean addMember(GroupEntity groupEntity,Integer inviteId) {
+	private Integer addMember(GroupEntity groupEntity,Integer inviteId) {
 		Class<GroupEntity> groupClazz = GroupEntity.class;
 		for(Integer number = 1;number < 10 ;number++){
 			String methodName = "getMemberId"+number;
@@ -54,15 +88,15 @@ public class GroupServiceImpl implements GroupService{
 					method =groupClazz.getMethod(methodName, Integer.class);
 					method.invoke(groupEntity, inviteId);
 					groupEntity.setAmount(number+1);
-					return true;
+					return number;
 				}
 					
 			} catch (Exception e) {
 				e.printStackTrace();
-				return false;
+				return -1;
 			} 
 		}
-		return false;
+		return -1;
 	}
 	
 	public GroupEntity findGroup(Integer groupId){
@@ -83,6 +117,7 @@ public class GroupServiceImpl implements GroupService{
 		
 		if (deleteExcute(groupEntity, deleteId)){
 			groupDao.updateGroup(groupEntity);
+			ugRelateDao.deleteRelate(ugRelateDao.findRelate(deleteId, groupId));
 			return true;
 		}
 		return false;
