@@ -8,6 +8,6 @@ import entity.PersonalInfEntity;
 
 public interface PersonalInfDao {
 	public void update(PersonalInfEntity entity);
-	public PersonalInfEntity findByExam(String email);
+	public PersonalInfEntity findByEmail(String email);
 
 }

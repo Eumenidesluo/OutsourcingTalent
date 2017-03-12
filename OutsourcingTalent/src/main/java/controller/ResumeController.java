@@ -20,6 +20,13 @@ public class ResumeController {
 
 	@Autowired
 	ResumeService resumeService;
+	
+	/**
+	 * 
+	 * @param request 存放参数为resume，education，internship。schoolexp，evaluation，science等类的json
+	 * resume不能为null，其它属性可以为null
+	 * @return 各部分的生成的Id的json
+	 */
 	@RequestMapping(value="/addResume")
 	@ResponseBody
 	public String addResume(HttpServletRequest request){
@@ -68,6 +75,12 @@ public class ResumeController {
 		return JSON.toJSONString(reportMap);
 	}
 	
+	/**
+	 * 
+	 * @param request
+	 * 需要添加的部分的名字如education，internship等，对应的list<?>的json，添入的resume的Id
+	 * @return 对应生成的Id字符串，以 " "作为分隔符
+	 */
 	@RequestMapping(value = "/addPart")
 	@ResponseBody
 	public String addPartResume(HttpServletRequest request){
@@ -111,6 +124,12 @@ public class ResumeController {
 		return returnStr;
 	}
 	
+	/**
+	 * 
+	 * @param request 需要参数，简历Id
+	 * 
+	 * @return 对应简历基本信息的json
+	 */
 	@RequestMapping(value="/queryResume")
 	@ResponseBody
 	public String queryResume(HttpServletRequest request){
@@ -118,6 +137,10 @@ public class ResumeController {
 		return resumeService.queryResume(Integer.parseInt(resumeId));
 	}
 	
+	/**
+	 * @param request 根据isResumeId判断是查询单个部分信息还是全部部分信息，Id可以解读为resumeId或者部分Id
+	 * @return 查询到的List<?>的Json或错误信息
+	 */
 	@RequestMapping(value="/queryPart")
 	@ResponseBody
 	public String queryPart(HttpServletRequest request){
@@ -138,6 +161,10 @@ public class ResumeController {
 		
 	}
 
+	/**
+	 * @param request 根据resumeId删除对应的简历信息
+	 * @return "success" 删除成功，其它信息 删除失败
+	 */
 	@RequestMapping(value="/deleteResume")
 	@ResponseBody
 	public String deleteResume(HttpServletRequest request){
@@ -151,6 +178,11 @@ public class ResumeController {
 			return "Unknown error";
 	}
 	
+	/**
+	 * 
+	 * @param request 需要删除的part的Ids
+	 * @return 返回String类型，对应Id删除成功则对应位置为S，否则为F
+	 */
 	@RequestMapping(value="/deletePart")
 	@ResponseBody
 	public String deletePart(HttpServletRequest request){
@@ -168,6 +200,11 @@ public class ResumeController {
 		return retrunValue;
 	}
 
+	/**
+	 * 
+	 * @param request update resume或evaluation等single部分
+	 * @return "success" or "failed"
+	 */
 	@RequestMapping(value="/updateReOrEva")
 	@ResponseBody
 	public String updateResumeOrEva(HttpServletRequest request){
@@ -179,6 +216,11 @@ public class ResumeController {
 		return "failed";
 	}
 	
+	/**
+	 * 
+	 * @param request update 允许多例的部分，参数为需要更新的partName
+	 * @return 返回String类型，对应Id更新成功则对应位置为S，否则为F
+	 */
 	@RequestMapping(value="/updateParts")
 	@ResponseBody
 	public String updateParts(HttpServletRequest request){

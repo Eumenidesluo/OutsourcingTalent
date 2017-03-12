@@ -23,7 +23,7 @@ public class PersonalInfDaoImpl extends HibernateDaoSupport implements PersonalI
 		getHibernateTemplate().update(entity);
 	}
 
-	public PersonalInfEntity findByExam(String  email) {
+	public PersonalInfEntity findByEmail(String  email) {
 		return (PersonalInfEntity)getHibernateTemplate().find("from PersonalInfEntity as e where e.email=?",email).get(0);
 //		System.out.println(list);
 	}

@@ -53,6 +53,7 @@
         <value>entity.ResumeEntity</value>
         <value>entity.SelectUserRecruitEntity</value>
         <value>entity.ProjectStatusEntity</value>
+        <value>entity.NoticeEntity</value>
       </list>
     </property>
   </bean>
@@ -192,6 +193,13 @@
   </bean>
   <bean id="projectStatusDao" parent="transactionBase">
     <property name="target" ref="projectStatusDaoTarget"/>
+  </bean>
+  
+  <bean id="noticeDaoTarget" class="daoimpl.NoticeDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="noticeDao" parent="transactionBase">
+    <property name="target" ref="noticeDaoTarget"/>
   </bean>
   
   <bean id="projectStatusServiceTarget" class="serviceimpl.ProjectStatusServiceImpl">

@@ -10,5 +10,5 @@ public interface CoRecruitDao {
 	public void updateRecruit(CoRecruitEntity entity);
 	public CoRecruitEntity findRecruitByRecruitId(int recruitId);
 	public List<?> findRecruitsByCompanyId(int companyId);
-
+	public List<?> findRecruitsLimit(int begin,int max,String tag);
 }

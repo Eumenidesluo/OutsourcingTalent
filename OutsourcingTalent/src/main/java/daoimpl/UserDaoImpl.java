@@ -1,11 +1,12 @@
 package daoimpl;
 
-import dao.UserDao;
-import entity.UserEntity;
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
-import java.util.List;
+import dao.UserDao;
+import entity.UserEntity;
 
 /**
  * Created by Eumenides on 2017/2/18.
@@ -56,4 +57,11 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
         else
             return -1;
     }
+
+
+	@Override
+	public UserEntity findById(String id) {
+		List<?> list=getHibernateTemplate().find("from UserEntity as u where u.id=?",Integer.parseInt(id));
+        return (UserEntity) list.get(0);
+	}
 }

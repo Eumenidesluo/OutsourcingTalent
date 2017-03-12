@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dao.PersonalInfDao;
+import dao.UserDao;
 import entity.PersonalInfEntity;
+import entity.UserEntity;
 import service.PersonalInfService;
 @Service("personalInfService")
 public class PersonalInfServiceImpl implements PersonalInfService{
 
 	@Autowired
 	PersonalInfDao personalInfDao;
+	@Autowired
+	UserDao userDao;
+	
 	public PersonalInfDao getPersonalInfDao() {
 		return personalInfDao;
 	}
@@ -22,8 +27,17 @@ public class PersonalInfServiceImpl implements PersonalInfService{
 		this.personalInfDao = personalInfDao;
 	}
 	
+	
+	
+	public UserDao getUserDao() {
+		return userDao;
+	}
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+	
 	public PersonalInfEntity getPersonByEmail(String email) {
-		PersonalInfEntity entity = personalInfDao.findByExam(email);
+		PersonalInfEntity entity = personalInfDao.findByEmail(email);
 		return entity;
 	}
 	
@@ -61,6 +75,15 @@ public class PersonalInfServiceImpl implements PersonalInfService{
 	public Boolean updatePersonInformation(String json) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public PersonalInfEntity getPersonById(String id) {
+		UserEntity userEntity = userDao.findById(id);
+		if (userEntity == null) {
+			return null;
+		}
+		PersonalInfEntity personalInfEntity = personalInfDao.findByEmail(userEntity.getEmail());
+		return personalInfEntity;
 	}
 	
 	
