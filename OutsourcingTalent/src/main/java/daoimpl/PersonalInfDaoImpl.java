@@ -1,5 +1,7 @@
 package daoimpl;
 
+import java.util.List;
+
 //import entity.PersonalInfEntity;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
@@ -24,7 +26,11 @@ public class PersonalInfDaoImpl extends HibernateDaoSupport implements PersonalI
 	}
 
 	public PersonalInfEntity findByEmail(String  email) {
-		return (PersonalInfEntity)getHibernateTemplate().find("from PersonalInfEntity as e where e.email=?",email).get(0);
+		List<?> list = getHibernateTemplate().find("from PersonalInfEntity as e where e.email=?",email);
+		if (list.size() == 0) {
+			return null;
+		}
+		return (PersonalInfEntity)list.get(0);
 //		System.out.println(list);
 	}
 

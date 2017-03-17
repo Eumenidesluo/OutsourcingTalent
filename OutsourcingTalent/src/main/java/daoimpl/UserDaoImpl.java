@@ -33,6 +33,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 
     public UserEntity findByEmail(String email) {
         List<?> list=getHibernateTemplate().find("from UserEntity as u where u.email=?",email);
+        if (list.size() == 0) {
+			return null;
+		}
         return (UserEntity) list.get(0);
     }
 
@@ -62,6 +65,9 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 	@Override
 	public UserEntity findById(String id) {
 		List<?> list=getHibernateTemplate().find("from UserEntity as u where u.id=?",Integer.parseInt(id));
+		if(list.size() == 0){
+			return null;
+		}
         return (UserEntity) list.get(0);
 	}
 }

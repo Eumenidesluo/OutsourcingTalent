@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import component.Sex;
@@ -32,7 +30,6 @@ public class PersonalInfEntity {
     private String phoneNumber;
     private Sex sex;
 
-    private UserEntity userEntityByEmail;
     
     public PersonalInfEntity() {
 		email = "";
@@ -155,35 +152,81 @@ public class PersonalInfEntity {
         this.sex = sex;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((birthday == null) ? 0 : birthday.hashCode());
+		result = prime * result + ((education == null) ? 0 : education.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((graduationTime == null) ? 0 : graduationTime.hashCode());
+		result = prime * result + ((major == null) ? 0 : major.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
+		result = prime * result + ((school == null) ? 0 : school.hashCode());
+		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
+		return result;
+	}
 
-        PersonalInfEntity entity = (PersonalInfEntity) o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PersonalInfEntity other = (PersonalInfEntity) obj;
+		if (address == null) {
+			if (other.address != null)
+				return false;
+		} else if (!address.equals(other.address))
+			return false;
+		if (birthday == null) {
+			if (other.birthday != null)
+				return false;
+		} else if (!birthday.equals(other.birthday))
+			return false;
+		if (education == null) {
+			if (other.education != null)
+				return false;
+		} else if (!education.equals(other.education))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (graduationTime == null) {
+			if (other.graduationTime != null)
+				return false;
+		} else if (!graduationTime.equals(other.graduationTime))
+			return false;
+		if (major == null) {
+			if (other.major != null)
+				return false;
+		} else if (!major.equals(other.major))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
+				return false;
+		} else if (!phoneNumber.equals(other.phoneNumber))
+			return false;
+		if (school == null) {
+			if (other.school != null)
+				return false;
+		} else if (!school.equals(other.school))
+			return false;
+		if (sex != other.sex)
+			return false;
+		return true;
+	}
 
-        if (email != null ? !email.equals(entity.email) : entity.email != null) return false;
-        if (name != null ? !name.equals(entity.name) : entity.name != null) return false;
-        if (address != null ? !address.equals(entity.address) : entity.address != null) return false;
-        if (birthday != null ? !birthday.equals(entity.birthday) : entity.birthday != null) return false;
-        if (education != null ? !education.equals(entity.education) : entity.education != null) return false;
-        if (graduationTime != null ? !graduationTime.equals(entity.graduationTime) : entity.graduationTime != null)
-            return false;
-        if (school != null ? !school.equals(entity.school) : entity.school != null) return false;
-        if (major != null ? !major.equals(entity.major) : entity.major != null) return false;
-        if (phoneNumber != null ? !phoneNumber.equals(entity.phoneNumber) : entity.phoneNumber != null) return false;
-        if (sex != null ? !sex.equals(entity.sex) : entity.sex != null) return false;
 
-        return true;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
-    public UserEntity getUserEntityByEmail(){
-        return userEntityByEmail;
-    }
-
-    public void setUserEntityByEmail(UserEntity userEntityByEmail) {
-        this.userEntityByEmail = userEntityByEmail;
-    }
 }

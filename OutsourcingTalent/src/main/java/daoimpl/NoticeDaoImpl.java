@@ -16,12 +16,18 @@ public class NoticeDaoImpl extends HibernateDaoSupport implements NoticeDao{
     }
 	@Override
 	public List<?> queryByUserId(String userId) {
-		List<?> list = getHibernateTemplate().find("from NoticeEntity e where e.userId=?", userId);
+		List<?> list = getHibernateTemplate().find("from NoticeEntity e where e.userId=?", Integer.parseInt(userId));
+		if (list.size() == 0) {
+			return null;
+		}
 		return list;
 	}
 	@Override
 	public List<NoticeEntity> queryByUserId(String userId, int number) {
 		List<?> list = queryByUserId(userId);
+		if (list == null) {
+			return null;
+		}
 		List<NoticeEntity> values = new ArrayList<>();
 		
 		for(int i = 0;i < number;i++){

@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "user", schema = "outsourcingtalent", catalog = "")
 public class UserEntity {
-    private int id;
+    private Integer id;
     private String password;
     private String email;
     private int status;
@@ -35,11 +35,11 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id")
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
