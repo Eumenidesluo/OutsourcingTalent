@@ -1,8 +1,10 @@
 package service;
 
+import entity.ResumeEntity;
+
 public interface ResumeService {
 	public String addResumeInformations(String partName,String json,Object... values);
-	public String queryResume(int resumeId);
+	public ResumeEntity queryResume(int resumeId);
 	public String queryPartByResumeId(String partName,int resumeId);
 	public String queryPartByMainId(String partName,int Id);
 	public Boolean deleteResume(int resumeId);

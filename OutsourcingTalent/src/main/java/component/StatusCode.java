@@ -12,4 +12,5 @@ public class StatusCode {
 	public final static Integer UNKNOW_ERROR = 3000;
 	public final static Integer MAX = 3002;
 	public final static Integer SQL_OP_ERR = 3003;
+	public final static Integer INFORMATION_PARSE_FAILED = 3004;
 }

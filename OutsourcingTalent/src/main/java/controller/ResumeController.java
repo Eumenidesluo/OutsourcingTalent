@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,10 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
+import component.StatusCode;
+import entity.ResumeEntity;
 import service.ResumeService;
 
 @Controller
-@RequestMapping(value="/Resume")
+@RequestMapping(value="/resume")
 public class ResumeController {
 
 	@Autowired
@@ -76,65 +79,141 @@ public class ResumeController {
 	}
 	
 	/**
-	 * 
-	 * @param request
-	 * 需要添加的部分的名字如education，internship等，对应的list<?>的json，添入的resume的Id
-	 * @return 对应生成的Id字符串，以 " "作为分隔符
-	 */
+     * <p>接口名称：addPart
+     * <p>主要描述：向指定简历添加模块信息
+     * <p>访问方式：post
+     * <p>URL: /resume/addPart
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * partName		String		Y		null	添加的简历模块的名字education，internship，schoolExp，evaluation，science
+     * partJson   	String 		Y    	NULL  	对应模块的信息
+     * resumeId		Integer		Y		null	添加往的简历的Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value = "/addPart")
 	@ResponseBody
-	public String addPartResume(HttpServletRequest request){
-
+	public String addPartResume(HttpServletRequest request,HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String partName = request.getParameter("partName");
 		String json = request.getParameter("partJson");
 		String resumeId = request.getParameter("resumeId");
 		
 		if (partName == null||json == null || resumeId == null) {
-			return "Invalid parameter";
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
-		Map<String, String> reportMap = new HashMap<>();
 		String returnStr = "";
 		
 		switch (partName) {
 		case "education":
 			returnStr = resumeService.addResumeInformations("education", json,resumeId);
-			reportMap.put("education", returnStr);
+			if (returnStr != null) {
+				result.put("status", StatusCode.SUCCESS);
+			}else {
+				result.put("status", StatusCode.UNKNOW_ERROR);
+			}
 			break;
 		case "internship":
 			returnStr = resumeService.addResumeInformations("internship", json,resumeId);
-			reportMap.put("internship", returnStr);
+			if (returnStr != null) {
+				result.put("status", StatusCode.SUCCESS);
+			}else {
+				result.put("status", StatusCode.UNKNOW_ERROR);
+			}
 			break;
 		case "schoolExp":
 			returnStr = resumeService.addResumeInformations("schoolExp", json,resumeId);
-			reportMap.put("schoolExp", returnStr);
+			if (returnStr != null) {
+				result.put("status", StatusCode.SUCCESS);
+			}else {
+				result.put("status", StatusCode.UNKNOW_ERROR);
+			}
 			break;
 		case "evaluation":
 			returnStr = resumeService.addResumeInformations("evaluation", json,resumeId);
-			reportMap.put("evaluation", returnStr);
+			if (returnStr != null) {
+				result.put("status", StatusCode.SUCCESS);
+			}else {
+				result.put("status", StatusCode.UNKNOW_ERROR);
+			}
 			break;
 		case "science":
 			returnStr = resumeService.addResumeInformations("science", json,resumeId);
-			reportMap.put("science", returnStr);
+			if (returnStr != null) {
+				result.put("status", StatusCode.SUCCESS);
+			}else {
+				result.put("status", StatusCode.UNKNOW_ERROR);
+			}
 			break;
 
 		default:
-			returnStr = "Unknown parameter";
+			result.put("status", StatusCode.PARAMETER_ERROR);
 			break;
 		}
-		return returnStr;
+		return JSON.toJSONString(result);
 	}
 	
 	/**
-	 * 
-	 * @param request 需要参数，简历Id
-	 * 
-	 * @return 对应简历基本信息的json
-	 */
+     * <p>接口名称：queryResume
+     * <p>主要描述：查询指定简历
+     * <p>访问方式：post
+     * <p>URL: /resume/queryResume
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * resumeId		Integer		Y		null	查询的简历的Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     resume：查询到的简历的信息
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value="/queryResume")
 	@ResponseBody
-	public String queryResume(HttpServletRequest request){
+	public String queryResume(HttpServletRequest request,HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String resumeId = request.getParameter("resumeId");
-		return resumeService.queryResume(Integer.parseInt(resumeId));
+		if (resumeId == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		ResumeEntity resumeEntity = resumeService.queryResume(Integer.parseInt(resumeId));
+		if (resumeEntity == null) {
+			result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}else{
+			result.put("status", StatusCode.SUCCESS);
+			result.put("resume", resumeEntity);
+			return JSON.toJSONString(result);
+		}
 	}
 	
 	/**

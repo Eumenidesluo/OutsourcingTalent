@@ -94,13 +94,13 @@ public class ResumeServiceImpl implements ResumeService {
 		return reportIdStr;
 	}
 
-	public String queryResume(int resumeId){
+	public ResumeEntity queryResume(int resumeId){
 		
 		ResumeEntity resumeEntity = resumeDao.findResumeById(resumeId);
 		if (resumeEntity != null) {
-			return JSON.toJSONString(resumeEntity);
+			return resumeEntity;
 		}else
-			return "Resume record does not exist";
+			return null;
 	}
 	public String queryPartByResumeId(String partName,int resumeId){
 		String returnString;

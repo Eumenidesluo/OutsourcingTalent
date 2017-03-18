@@ -45,7 +45,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
 		String apply = projectStatusEntity.getApplyGroup();
 		String[] applyArray = apply.split(" ");
 		List<String> applyList = Arrays.asList(applyArray);
-		if (!applyList.contains(appointor)) {
+		if (!applyList.contains(appointor.toString())) {
 			throw new ServiceException("Unacceptable appoint");
 		}
 		if (projectStatusEntity.getIsAppoint()==1) {
@@ -72,7 +72,7 @@ public class ProjectStatusServiceImpl implements ProjectStatusService {
 	public Boolean apply(Integer projectId,Integer groupId){
 		String applyStr ;
 		ProjectStatusEntity projectStatusEntity = projectStatusDao.queryProjectStatus(projectId);
-		if (projectStatusEntity.getIsAppoint() == 0) {
+		if (projectStatusEntity.getIsAppoint() != 0) {
 			return false;
 		}
 		if (projectStatusEntity.getApplyGroup() == null) {

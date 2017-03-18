@@ -31,11 +31,19 @@ public class RelateGPDaoImpl extends HibernateDaoSupport implements RelateGPDao 
 	}
 
 	public List<?> findRelatesByProjectId(int projectId) {
-		return getHibernateTemplate().find("from RelateGroupProjectEntity e where e.projectId", projectId);
+		List<?> list = getHibernateTemplate().find("from RelateGroupProjectEntity e where e.projectId=?", projectId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
 	}
 
 	public List<?> findRelatesByGroupId(int groupId) {
-		return getHibernateTemplate().find("from RelateGroupProjectEntity e where e.groupId", groupId);
+		List<?> list = getHibernateTemplate().find("from RelateGroupProjectEntity e where e.groupId=?", groupId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
 	}
 
 }
