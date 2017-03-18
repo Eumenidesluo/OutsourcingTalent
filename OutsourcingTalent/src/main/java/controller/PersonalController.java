@@ -50,7 +50,7 @@ public class PersonalController {
     @ResponseBody
     public String execute(HttpServletRequest request,HttpSession session){
 		Map< String, Object> result = new HashMap<>();
-		String userId = session.getAttribute("userId").toString();
+		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
@@ -67,7 +67,7 @@ public class PersonalController {
     }
 	
 	/**
-     * <p>接口名称：update
+     * <p>接口名称：query
      * <p>主要描述：获取个人信息
      * <p>访问方式：post
      * <p>URL: /personal/query
@@ -95,8 +95,8 @@ public class PersonalController {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		String userId = session.getAttribute("userId").toString();
-		if (userId == null||userId != personId) {
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null||userId != Integer.parseInt(personId)) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}

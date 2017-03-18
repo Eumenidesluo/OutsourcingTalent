@@ -43,11 +43,12 @@ public class GroupServiceImpl implements GroupService{
 	public Integer createGroup(Integer creatorId) {
 		GroupEntity groupEntity = new GroupEntity();
 		groupEntity.setLeaderId(creatorId);
+		groupEntity.setAmount(1);
 		RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
 		Integer groupId =  groupDao.addGroup(groupEntity);
 		relateEntity.setUserId(creatorId);
 		relateEntity.setGroupId(groupId);
-		relateEntity.setIndex(0);
+		relateEntity.setPlace(0);
 		ugRelateDao.addRelate(relateEntity);
 		return groupId;
 		
@@ -69,7 +70,7 @@ public class GroupServiceImpl implements GroupService{
 			RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
 			relateEntity.setGroupId(groupId);
 			relateEntity.setUserId(inviteId);
-			relateEntity.setIndex(1);
+			relateEntity.setPlace(index);
 			ugRelateDao.addRelate(relateEntity);
 			return true;
 		}

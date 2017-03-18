@@ -1,5 +1,7 @@
 package daoimpl;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
@@ -25,7 +27,11 @@ public class GroupDaoImpl extends HibernateDaoSupport implements GroupDao {
 	}
 
 	public GroupEntity findGroup(int groupId) {
-		return (GroupEntity)getHibernateTemplate().find("from GroupEntity e where e.groupId=?", groupId).get(0);
+		List<?> list = getHibernateTemplate().find("from GroupEntity e where e.groupId=?", groupId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return (GroupEntity)list.get(0);
 	}
 
 }

@@ -54,6 +54,7 @@
         <value>entity.SelectUserRecruitEntity</value>
         <value>entity.ProjectStatusEntity</value>
         <value>entity.NoticeEntity</value>
+        <value>entity.RelateUserGroupEntity</value>
       </list>
     </property>
   </bean>

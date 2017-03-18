@@ -17,7 +17,7 @@ public class RelateUserGroupEntity {
 	private int relateId;
     private int userId;
     private int groupId;
-    private int index;
+    private int place;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -51,13 +51,13 @@ public class RelateUserGroupEntity {
     }
 
     @Basic
-    @Column(name = "index")
-    public int getIndex() {
-        return index;
+    @Column(name = "place")
+    public int getPlace() {
+        return place;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
+    public void setPlace(int place) {
+        this.place = place;
     }
 
 	@Override
@@ -65,7 +65,7 @@ public class RelateUserGroupEntity {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + groupId;
-		result = prime * result + index;
+		result = prime * result + place;
 		result = prime * result + relateId;
 		result = prime * result + userId;
 		return result;
@@ -82,7 +82,7 @@ public class RelateUserGroupEntity {
 		RelateUserGroupEntity other = (RelateUserGroupEntity) obj;
 		if (groupId != other.groupId)
 			return false;
-		if (index != other.index)
+		if (place != other.place)
 			return false;
 		if (relateId != other.relateId)
 			return false;
@@ -90,4 +90,6 @@ public class RelateUserGroupEntity {
 			return false;
 		return true;
 	}
+
+	
 }

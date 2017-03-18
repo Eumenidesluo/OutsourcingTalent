@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import component.StatusCode;
 import dao.CoRecruitDao;
 import dao.NoticeDao;
 import dao.UserDao;
+import entity.CoRecruitEntity;
 import entity.NoticeEntity;
 import entity.PersonalInfEntity;
 import entity.UserEntity;
@@ -110,7 +112,8 @@ public class LoginController {
      */
     @RequestMapping(value = "/getInformation")
     @ResponseBody
-    public String loginGetInformation(HttpServletRequest request,HttpSession session){
+    public String loginGetInformation(HttpServletRequest request,HttpSession session,HttpServletResponse response){
+    	response.setCharacterEncoding("utf-8");
     	Map<String, Object> result = new HashMap<>();
     	Integer userId = (Integer) session.getAttribute("userId");
     	if (userId == null) {
@@ -126,6 +129,8 @@ public class LoginController {
     	List<?> recruitEntitys = coRecruitDao.findRecruitsLimit(0, 5,tag);
     	List<NoticeEntity> notice = noticeDao.queryByUserId(userId.toString(),2);
     	result.put("status", StatusCode.SUCCESS);
+    	CoRecruitEntity coRecruitEntity = (CoRecruitEntity)recruitEntitys.get(0);
+    	System.out.println(coRecruitEntity.getTitle());
     	result.put("recruits", recruitEntitys);
     	result.put("personal", personalInfEntity);
     	result.put("notices", notice);

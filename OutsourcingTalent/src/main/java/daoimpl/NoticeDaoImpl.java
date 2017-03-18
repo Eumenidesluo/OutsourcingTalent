@@ -28,8 +28,7 @@ public class NoticeDaoImpl extends HibernateDaoSupport implements NoticeDao{
 		if (list == null) {
 			return null;
 		}
-		List<NoticeEntity> values = new ArrayList<>();
-		
+		List<NoticeEntity> values = new ArrayList<>();		
 		for(int i = 0;i < number;i++){
 			values.add((NoticeEntity)list.get(i));
 		}
