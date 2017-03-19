@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
-import dao.CoRecruitDao;
 import dao.NoticeDao;
 import dao.UserDao;
-import entity.CoRecruitEntity;
 import entity.NoticeEntity;
 import entity.PersonalInfEntity;
+import entity.RecruitBean;
 import entity.UserEntity;
 import service.PersonalInfService;
+import service.RecruitService;
 import serviceimpl.SpringContextHolder;
 
 /**
@@ -37,7 +37,7 @@ public class LoginController {
 	@Autowired
 	PersonalInfService personalInfService;
 	@Autowired
-	CoRecruitDao coRecruitDao;
+	RecruitService recruitService;
 	@Autowired
 	NoticeDao noticeDao;
 	
@@ -126,10 +126,15 @@ public class LoginController {
 			return JSON.toJSONString(result);
 		}
     	PersonalInfEntity personalInfEntity = personalInfService.getPersonById(userId.toString());
-    	List<?> recruitEntitys = coRecruitDao.findRecruitsLimit(0, 5,tag);
+    	List<RecruitBean> recruitEntitys = recruitService.findRecruitsLimit(0, 5,tag);
+    	if (recruitEntitys == null) {
+    		result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
     	List<NoticeEntity> notice = noticeDao.queryByUserId(userId.toString(),2);
     	result.put("status", StatusCode.SUCCESS);
-    	CoRecruitEntity coRecruitEntity = (CoRecruitEntity)recruitEntitys.get(0);
+    	RecruitBean coRecruitEntity = (RecruitBean)recruitEntitys.get(0);
+    	
     	System.out.println(coRecruitEntity.getTitle());
     	result.put("recruits", recruitEntitys);
     	result.put("personal", personalInfEntity);

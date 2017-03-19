@@ -14,14 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
-import dao.CoRecruitDao;
+import entity.RecruitBean;
+import service.RecruitService;
 
 @Controller
 @RequestMapping(value = "/recruit")
 public class CompanyRecruitController {
 
 	@Autowired
-	CoRecruitDao coRecruitDao;
+	RecruitService recruitService;
 	
 	/**
      * <p>½Ó¿ÚÃû³Æ£ºquery
@@ -59,7 +60,7 @@ public class CompanyRecruitController {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		List<?> list = coRecruitDao.findRecruitsLimit(Integer.parseInt(begin), 10, tag);
+		List<RecruitBean> list = recruitService.findRecruitsLimit(Integer.parseInt(begin), 10, tag);
 		if (list == null) {
 			result.put("status", StatusCode.MAX);
 			return JSON.toJSONString(result);
