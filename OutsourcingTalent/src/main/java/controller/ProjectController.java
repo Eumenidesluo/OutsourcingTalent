@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,6 +72,49 @@ public class ProjectController {
 		return JSON.toJSONString(result);
 	}
 	
+	/**
+     * <p>接口名称：list
+     * <p>主要描述：批量查询项目列表
+     * <p>访问方式：post
+     * <p>URL: /project/list
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * count	   Integer 		Y    	NULL  	已查询的记录数量
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     projects: 查询到的项目的信息
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
+	public String list(HttpServletRequest request,HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	String begin = request.getParameter("count");
+    	if (begin == null) {
+    		result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+    	
+    	List<?> projectList = projectService.queryManyProjects(Integer.parseInt(begin), 10);
+    	if (projectList == null) {
+    		result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
+    	result.put("status", StatusCode.SUCCESS);
+    	result.put("projects", projectList);
+		return JSON.toJSONString(result);
+	}
 	/**
      * <p>接口名称：cancel
      * <p>主要描述：取消已发布的项目

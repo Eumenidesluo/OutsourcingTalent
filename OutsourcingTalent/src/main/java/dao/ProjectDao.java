@@ -11,5 +11,5 @@ public interface ProjectDao {
 	public Boolean updateProject(ProjectEntity entity);
 	public ProjectEntity findProjectByProjectId(int projectId);
 	public List<?> findProjectByCompanyId(int CompanyId);
-	
+	public List<?> findProjectsLimit(int begin,int max);
 }

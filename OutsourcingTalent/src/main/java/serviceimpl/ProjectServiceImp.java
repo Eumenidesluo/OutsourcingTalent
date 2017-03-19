@@ -1,9 +1,13 @@
 package serviceimpl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import dao.CompanyDao;
 import dao.ProjectDao;
+import entity.CompanyEntity;
 import entity.ProjectEntity;
 import service.ProjectService;
 
@@ -12,6 +16,8 @@ public class ProjectServiceImp implements ProjectService {
 	
 	@Autowired
 	ProjectDao projectDao;
+	@Autowired
+	CompanyDao companyDao;
 
 	public Integer releaseProject(ProjectEntity projectEntity) {
 		return projectDao.addProject(projectEntity);
@@ -30,7 +36,32 @@ public class ProjectServiceImp implements ProjectService {
 	}
 
 	public ProjectEntity queryProject(Integer projectId) {
-		return projectDao.findProjectByProjectId(projectId);
+		ProjectEntity projectEntity = projectDao.findProjectByProjectId(projectId);
+		if (projectEntity == null) {
+			return null;
+		}
+		CompanyEntity companyEntity = companyDao.findCompanyById(projectEntity.getCompanyId());
+		if (companyEntity == null) {
+			return null;
+		}
+		projectEntity.setCompanyName(companyEntity.getName());
+		return projectEntity;
+	}
+	
+	public List<?> queryManyProjects(int begin,int max) {
+		List<?> list = projectDao.findProjectsLimit(begin, max);
+		if (list.size() == 0) {
+			return null;
+		}
+		for (Object o:list) {
+			ProjectEntity entity = (ProjectEntity) o;
+			CompanyEntity companyEntity = companyDao.findCompanyById(entity.getCompanyId());
+			if (companyEntity == null) {
+				return null;
+			}
+			entity.setCompanyName(companyEntity.getName());
+		}
+		return list;
 	}
 
 }
