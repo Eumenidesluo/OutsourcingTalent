@@ -1,15 +1,16 @@
 package serviceimpl;
 
+import java.util.Date;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ParseException;
+import org.springframework.stereotype.Service;
+
 import component.MD5Util;
 import component.ServiceException;
 import dao.UserDao;
 import entity.UserEntity;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
-import org.springframework.stereotype.Service;
 import service.RegisterValidate;
-
-import java.util.Date;
 
 /**
  * Created by Eumenides on 2017/2/18.
@@ -24,7 +25,7 @@ public class RegisterValidateImpl implements RegisterValidate{
     }
 
     /**
-     * å¤„ç†æ³¨å†Œ
+     * ´¦Àí×¢²á
      */
 
     public void processregister(String password,String email){
@@ -33,14 +34,14 @@ public class RegisterValidateImpl implements RegisterValidate{
         user.setEmail(email);
         user.setRegisterTime(new java.sql.Timestamp(System.currentTimeMillis()));
         user.setStatus(0);
-        ///å¦‚æœå¤„äºå®‰å…¨ï¼Œå¯ä»¥å°†æ¿€æ´»ç å¤„ç†çš„æ›´å¤æ‚ç‚¹ï¼Œè¿™é‡Œæˆ‘ç¨åšç®€å•å¤„ç†
+        ///Èç¹û´¦ÓÚ°²È«£¬¿ÉÒÔ½«¼¤»îÂë´¦ÀíµÄ¸ü¸´ÔÓµã£¬ÕâÀïÎÒÉÔ×ö¼òµ¥´¦Àí
         //user.setValidateCode(MD5Tool.MD5Encrypt(email));
         user.setValidateCode(MD5Util.encode2hex(email));
 
-        userDao.save(user);//ä¿å­˜æ³¨å†Œä¿¡æ¯
+        userDao.save(user);//±£´æ×¢²áĞÅÏ¢
 
-        ///é‚®ä»¶çš„å†…å®¹
-        StringBuffer sb=new StringBuffer("ç‚¹å‡»ä¸‹é¢é“¾æ¥æ¿€æ´»è´¦å·ï¼Œ48å°æ—¶ç”Ÿæ•ˆï¼Œå¦åˆ™é‡æ–°æ³¨å†Œè´¦å·ï¼Œé“¾æ¥åªèƒ½ä½¿ç”¨ä¸€æ¬¡ï¼Œè¯·å°½å¿«æ¿€æ´»ï¼</br>");
+        ///ÓÊ¼şµÄÄÚÈİ
+        StringBuffer sb=new StringBuffer("µã»÷ÏÂÃæÁ´½Ó¼¤»îÕËºÅ£¬48Ğ¡Ê±ÉúĞ§£¬·ñÔòÖØĞÂ×¢²áÕËºÅ£¬Á´½ÓÖ»ÄÜÊ¹ÓÃÒ»´Î£¬Çë¾¡¿ì¼¤»î£¡</br>");
         sb.append("<a href=\"http://localhost:8082/register?action=activate&email=");
         sb.append(email);
         sb.append("&validateCode=");
@@ -51,47 +52,47 @@ public class RegisterValidateImpl implements RegisterValidate{
         sb.append(user.getValidateCode());
         sb.append("</a>");
 
-        //å‘é€é‚®ä»¶
+        //·¢ËÍÓÊ¼ş
         SendEmailImpl sendEmail=(SendEmailImpl) SpringContextHolder.getBean("sendEmail");
         sendEmail.send(email,sb.toString());
-        System.out.println("å‘é€é‚®ä»¶");
+        System.out.println("·¢ËÍÓÊ¼ş");
 
     }
 
     /**
-     * å¤„ç†æ¿€æ´»
+     * ´¦Àí¼¤»î
      * @throws ParseException
      */
-    ///ä¼ é€’æ¿€æ´»ç å’Œemailè¿‡æ¥
+    ///´«µİ¼¤»îÂëºÍemail¹ıÀ´
     public void processActivate(String email , String validateCode)throws ServiceException, ParseException {
-        //æ•°æ®è®¿é—®å±‚ï¼Œé€šè¿‡emailè·å–ç”¨æˆ·ä¿¡æ¯
+        //Êı¾İ·ÃÎÊ²ã£¬Í¨¹ıemail»ñÈ¡ÓÃ»§ĞÅÏ¢
         UserEntity user=userDao.findByEmail(email);
-        //éªŒè¯ç”¨æˆ·æ˜¯å¦å­˜åœ¨
+        //ÑéÖ¤ÓÃ»§ÊÇ·ñ´æÔÚ
         if(user!=null) {
-            //éªŒè¯ç”¨æˆ·æ¿€æ´»çŠ¶æ€
+            //ÑéÖ¤ÓÃ»§¼¤»î×´Ì¬
             if(user.getStatus()==0) {
-                ///æ²¡æ¿€æ´»
-                Date currentTime = new Date();//è·å–å½“å‰æ—¶é—´
-                //éªŒè¯é“¾æ¥æ˜¯å¦è¿‡æœŸ
+                ///Ã»¼¤»î
+                Date currentTime = new Date();//»ñÈ¡µ±Ç°Ê±¼ä
+                //ÑéÖ¤Á´½ÓÊÇ·ñ¹ıÆÚ
                 currentTime.before(user.getRegisterTime());
                 if(currentTime.before(user.getLastActivateTime())) {
-                    //éªŒè¯æ¿€æ´»ç æ˜¯å¦æ­£ç¡®
+                    //ÑéÖ¤¼¤»îÂëÊÇ·ñÕıÈ·
                     if(validateCode.equals(user.getValidateCode())) {
-                        //æ¿€æ´»æˆåŠŸï¼Œ //å¹¶æ›´æ–°ç”¨æˆ·çš„æ¿€æ´»çŠ¶æ€ï¼Œä¸ºå·²æ¿€æ´»
+                        //¼¤»î³É¹¦£¬ //²¢¸üĞÂÓÃ»§µÄ¼¤»î×´Ì¬£¬ÎªÒÑ¼¤»î
                         System.out.println("==sq==="+user.getStatus());
-                        user.setStatus(1);//æŠŠçŠ¶æ€æ”¹ä¸ºæ¿€æ´»
+                        user.setStatus(1);//°Ñ×´Ì¬¸ÄÎª¼¤»î
                         System.out.println("==sh==="+user.getStatus());
                         userDao.update(user);
                     } else {
-                        throw new ServiceException("æ¿€æ´»ç ä¸æ­£ç¡®");
+                        throw new ServiceException("¼¤»îÂë²»ÕıÈ·");
                     }
-                } else { throw new ServiceException("æ¿€æ´»ç å·²è¿‡æœŸï¼");
+                } else { throw new ServiceException("¼¤»îÂëÒÑ¹ıÆÚ£¡");
                 }
             } else {
-                throw new ServiceException("é‚®ç®±å·²æ¿€æ´»ï¼Œè¯·ç™»å½•ï¼");
+                throw new ServiceException("ÓÊÏäÒÑ¼¤»î£¬ÇëµÇÂ¼£¡");
             }
         } else {
-            throw new ServiceException("è¯¥é‚®ç®±æœªæ³¨å†Œï¼ˆé‚®ç®±åœ°å€ä¸å­˜åœ¨ï¼‰ï¼");
+            throw new ServiceException("¸ÃÓÊÏäÎ´×¢²á£¨ÓÊÏäµØÖ·²»´æÔÚ£©£¡");
         }
 
     }

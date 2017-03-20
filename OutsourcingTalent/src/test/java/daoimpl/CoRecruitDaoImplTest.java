@@ -25,9 +25,8 @@ public class CoRecruitDaoImplTest {
 	public void addRecruitTest(){
 		CoRecruitEntity entity = new CoRecruitEntity();
 		entity.setCompanyId(1);
-		entity.setTitle("²úÆ·¿ª·¢");
+		entity.setTitle("ï¿½ï¿½Æ·ï¿½ï¿½ï¿½ï¿½");
 		coRecruitDao.addRecruit(entity);
 	}
-
 
 }

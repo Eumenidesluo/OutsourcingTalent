@@ -42,7 +42,6 @@ public class GroupController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/create")
@@ -84,7 +83,6 @@ public class GroupController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/invite")
@@ -130,7 +128,6 @@ public class GroupController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/deleteMember")
@@ -175,7 +172,6 @@ public class GroupController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/findGroup")

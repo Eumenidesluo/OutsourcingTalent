@@ -43,7 +43,6 @@ public class PersonalController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/update")
@@ -83,7 +82,6 @@ public class PersonalController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/query")

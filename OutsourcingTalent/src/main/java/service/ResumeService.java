@@ -5,7 +5,7 @@ import java.util.List;
 import entity.ResumeEntity;
 
 public interface ResumeService {
-	public String addResumeInformations(String partName,String json,Object... values);
+	public Integer addResumeInformations(String partName,String json,Object... values);
 	public ResumeEntity queryResume(int resumeId);
 	public List<?> queryPartByResumeId(String partName,int resumeId);
 	public Object queryPartByMainId(String partName,int Id);

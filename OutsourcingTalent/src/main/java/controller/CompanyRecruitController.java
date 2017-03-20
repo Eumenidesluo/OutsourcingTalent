@@ -43,7 +43,6 @@ public class CompanyRecruitController {
      * }
      * </pre>
      * <p>ÐÞ¸ÄÕß:³Âçù
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/query")

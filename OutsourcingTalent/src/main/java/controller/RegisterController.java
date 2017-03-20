@@ -50,7 +50,6 @@ public class RegisterController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
     @RequestMapping(value="/register",method={RequestMethod.GET,RequestMethod.POST})

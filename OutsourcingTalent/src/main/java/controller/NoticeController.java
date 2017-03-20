@@ -44,7 +44,6 @@ public class NoticeController {
      * }
      * </pre>
      * <p>ÐÞ¸ÄÕß:³Âçù
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/query")

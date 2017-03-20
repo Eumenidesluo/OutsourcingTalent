@@ -8,6 +8,7 @@ public class StatusCode {
 	public final static String PASSWORD_OR_EMAIL_WRONG = "4003";
 	public final static Integer AUTHENTICATION_FAILED = 4004;
 	public final static Integer PERMISSION_DENIED = 4005;
+	public final static Integer JSON_PARSE_ERROR = 4006;
 	public final static Integer REPEAT_REGISTER = 3001;
 	public final static Integer UNKNOW_ERROR = 3000;
 	public final static Integer MAX = 3002;

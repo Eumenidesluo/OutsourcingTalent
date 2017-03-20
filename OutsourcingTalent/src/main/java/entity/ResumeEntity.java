@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "resume", schema = "outsourcingtalent", catalog = "")
 public class ResumeEntity {
     private int resumeId;
+    private String name;
     private int userId;
     private String phone;
     private String email;
@@ -24,6 +25,7 @@ public class ResumeEntity {
     
     public ResumeEntity() {
     	phone = "";
+    	name = "";
     	email = "";
     	city = "";
     	label = "";
@@ -41,6 +43,16 @@ public class ResumeEntity {
     }
 
     @Basic
+    @Column(name="name")
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Basic
     @Column(name="userId")
     public int getUserId() {
 		return userId;
@@ -97,6 +109,7 @@ public class ResumeEntity {
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((label == null) ? 0 : label.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + resumeId;
 		result = prime * result + userId;
@@ -127,6 +140,11 @@ public class ResumeEntity {
 				return false;
 		} else if (!label.equals(other.label))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (phone == null) {
 			if (other.phone != null)
 				return false;
@@ -139,13 +157,5 @@ public class ResumeEntity {
 		return true;
 	}
 
-
-//    @OneToOne(mappedBy = "resumeByResumeId")
-//    public ReEvaluationEntity getReEvaluationByResumeId() {
-//        return reEvaluationByResumeId;
-//    }
-//
-//    public void setReEvaluationByResumeId(ReEvaluationEntity reEvaluationByResumeId) {
-//        this.reEvaluationByResumeId = reEvaluationByResumeId;
-//    }
+	
 }

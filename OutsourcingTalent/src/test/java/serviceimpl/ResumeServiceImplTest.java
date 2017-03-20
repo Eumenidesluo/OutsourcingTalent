@@ -40,7 +40,7 @@ public class ResumeServiceImplTest {
 		List<?> list = reEducationDao.findEducationsByResumeId(2);
 		String json = JSON.toJSONString(list);
 		System.out.println(json);
-		String string = resumeservice.addResumeInformations("education", json,2);
+		Integer string = resumeservice.addResumeInformations("education", json,2);
 		System.out.println(string);
 	}
 

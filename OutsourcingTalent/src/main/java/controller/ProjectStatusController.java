@@ -41,7 +41,6 @@ public class ProjectStatusController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/apply")
@@ -88,7 +87,6 @@ public class ProjectStatusController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/appoint")

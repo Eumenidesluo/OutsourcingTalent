@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
+import dao.ResumeDao;
 import entity.ResumeEntity;
 import service.ResumeService;
 
@@ -24,59 +25,93 @@ public class ResumeController {
 
 	@Autowired
 	ResumeService resumeService;
+	@Autowired
+	ResumeDao resumeDao;
 	
 	/**
-	 * 
-	 * @param request 存放参数为resume，education，internship。schoolexp，evaluation，science等类的json
-	 * resume不能为null，其它属性可以为null
-	 * @return 各部分的生成的Id的json
-	 */
+     * <p>接口名称：init
+     * <p>主要描述：初始化简历界面
+     * <p>访问方式：post
+     * <p>URL: /resume/init
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     resumes:所有简历基本信息
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/init")
+	@ResponseBody
+	public String init(HttpServletRequest request,HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
+    	List<?> list = resumeDao.findResume(userId);
+    	if (list == null) {
+    		result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
+    	result.put("status", StatusCode.SUCCESS);
+    	result.put("resumes", list);
+		return JSON.toJSONString(result);
+	}
+	/**
+     * <p>接口名称：addResume
+     * <p>主要描述：增加简历
+     * <p>访问方式：post
+     * <p>URL: /resume/addResume
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * resumeJson	String 		Y		null	简历基本信息
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
 	@RequestMapping(value="/addResume")
 	@ResponseBody
-	public String addResume(HttpServletRequest request){
-		String resumeJson = request.getParameter("resume");
-		String educationJson = request.getParameter("education");
-		String internshipJson = request.getParameter("internship");
-		String schoolExpJson = request.getParameter("schoolExp");
-		String evaluationJson = request.getParameter("evaluation");
-		String scienceJson = request.getParameter("science");
-		
-		Map<String, String> reportMap = new HashMap<>();
-		String returnStr = "";
-		String resumeId="";
-		
-		if(resumeJson != null){
-			resumeId = resumeService.addResumeInformations("resume", resumeJson);
-			reportMap.put("resume", resumeId);
-			returnStr = "";
+	public String addResume(HttpServletRequest request,HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+		String resumeJson = request.getParameter("resumeJson");
+		if (resumeJson == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
-		if (educationJson != null) {
-			returnStr = resumeService.addResumeInformations("education", educationJson,resumeId);
-			reportMap.put("education", returnStr);
-			returnStr = "";
+		ResumeEntity resumeEntity = JSON.parseObject(resumeJson,ResumeEntity.class);
+		if (resumeEntity == null) {
+			result.put("status", StatusCode.JSON_PARSE_ERROR);
+			return JSON.toJSONString(result);
 		}
-		if (educationJson != null) {
-			returnStr = resumeService.addResumeInformations("internship", internshipJson,resumeId);
-			reportMap.put("internship", returnStr);
-			returnStr = "";
+		Integer resumeId = resumeDao.saveResume(resumeEntity);
+		if (resumeId < 1) {
+			result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
 		}
-		if (educationJson != null) {
-			returnStr = resumeService.addResumeInformations("schoolExp", schoolExpJson,resumeId);
-			reportMap.put("schoolExp", returnStr);
-			returnStr = "";
-		}
-		if (educationJson != null) {
-			returnStr = resumeService.addResumeInformations("evaluation", evaluationJson,resumeId);
-			reportMap.put("evaluation", returnStr);
-			returnStr = "";
-		}
-		if (educationJson != null) {
-			returnStr = resumeService.addResumeInformations("science", scienceJson,resumeId);
-			reportMap.put("science", returnStr);
-			returnStr = "";
-		}
-		
-		return JSON.toJSONString(reportMap);
+		result.put("status", StatusCode.SUCCESS);
+		result.put("resumeId", resumeId);
+		return JSON.toJSONString(result);
 	}
 	
 	/**
@@ -119,7 +154,7 @@ public class ResumeController {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		String returnStr = "";
+		Integer returnStr;
 		
 		switch (partName) {
 		case "education":
@@ -299,7 +334,6 @@ public class ResumeController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/deleteResume")
@@ -344,7 +378,6 @@ public class ResumeController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/deletePart")
@@ -390,7 +423,6 @@ public class ResumeController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/updateParts")

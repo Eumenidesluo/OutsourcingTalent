@@ -40,7 +40,11 @@ public class ResumeDaoImpl extends HibernateDaoSupport implements ResumeDao {
 		
 	}
 	public List<?> findResume(int userId) {
-		return getHibernateTemplate().find("from ResumeEntity e where e.userId=?", userId);
+		List<?> list = getHibernateTemplate().find("from ResumeEntity e where e.userId=?", userId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
 	}
 	
 	public ResumeEntity findResumeById(int id){

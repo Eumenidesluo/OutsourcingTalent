@@ -60,7 +60,6 @@ public class LoginController {
 	 * }
 	 * </pre>
 	 * <p>修改者:陈琦
-	 * <pre>
 	 * 
 	 */
     @RequestMapping(value = "/login")
@@ -107,7 +106,6 @@ public class LoginController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
     @RequestMapping(value = "/getInformation")

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 @Table(name = "group", schema = "outsourcingtalent", catalog = "")
 public class GroupEntity {
     private int groupId;
+    private String name;
     private Integer leaderId;
     private Integer memberId1;
     private Integer memberId2;
@@ -43,6 +44,16 @@ public class GroupEntity {
     }
 
     @Basic
+    @Column(name = "name")
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Basic
     @Column(name = "leaderId")
     public Integer getLeaderId() {
         return leaderId;
@@ -168,6 +179,7 @@ public class GroupEntity {
 		result = prime * result + ((memberId7 == null) ? 0 : memberId7.hashCode());
 		result = prime * result + ((memberId8 == null) ? 0 : memberId8.hashCode());
 		result = prime * result + ((memberId9 == null) ? 0 : memberId9.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
@@ -237,8 +249,15 @@ public class GroupEntity {
 				return false;
 		} else if (!memberId9.equals(other.memberId9))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		return true;
 	}
+
+	
 
     
 }

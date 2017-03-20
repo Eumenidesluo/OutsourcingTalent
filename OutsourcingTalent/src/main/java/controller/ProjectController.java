@@ -43,7 +43,6 @@ public class ProjectController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/release")
@@ -90,7 +89,6 @@ public class ProjectController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	public String list(HttpServletRequest request,HttpSession session) {
@@ -132,7 +130,6 @@ public class ProjectController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value = "/cancel")
@@ -176,7 +173,6 @@ public class ProjectController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/query")
@@ -222,7 +218,6 @@ public class ProjectController {
      * }
      * </pre>
      * <p>修改者:陈琦
-     * <pre>
      * 
      */
 	@RequestMapping(value="/update")

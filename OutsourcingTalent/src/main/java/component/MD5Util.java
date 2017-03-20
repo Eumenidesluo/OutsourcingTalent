@@ -1,13 +1,13 @@
 package component;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by Eumenides on 2017/2/18.
  */
 import org.springframework.stereotype.Component;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Component
 public class MD5Util {
@@ -16,11 +16,7 @@ public class MD5Util {
     public MD5Util() {
     }
 
-    /**
-     * 将源字符串使用MD5加密为字节数组
-     * @param source
-     * @return
-     */
+    
     public static byte[] encode2bytes(String source) {
         byte[] result = null;
         try {
@@ -37,11 +33,7 @@ public class MD5Util {
         return result;
     }
 
-    /**
-     * 将源字符串使用MD5加密为32位16进制数
-     * @param source
-     * @return
-     */
+   
     public static String encode2hex(String source) {
         byte[] data = encode2bytes(source);
 
@@ -59,12 +51,7 @@ public class MD5Util {
         return hexString.toString();
     }
 
-    /**
-     * 验证字符串是否匹配
-     * @param unknown 待验证的字符串
-     * @param okHex 使用MD5加密过的16进制字符串
-     * @return  匹配返回true，不匹配返回false
-     */
+   
     public static boolean validate(String unknown , String okHex) {
         return okHex.equals(encode2hex(unknown));
     }

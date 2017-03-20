@@ -39,60 +39,58 @@ public class ResumeServiceImpl implements ResumeService {
 	ReScienceDao reScienceDao;
 	
 	
-	public String addResumeInformations(String partName, String json,Object... values) {
+	public Integer addResumeInformations(String partName, String json,Object... values) {
 		
-		String reportIdStr = "";
-		
+		Integer id = -1;
 		switch (partName) {
 		
 		case "resume":
 			ResumeEntity entity = JSON.parseObject(json,ResumeEntity.class);
 			Integer resumeId = resumeDao.saveResume(entity);
-			reportIdStr = resumeId.toString();
+			if (resumeId != null) {
+				id = resumeId;
+			}	
 			break;
 		case "evaluation":
 			ReEvaluationEntity evaluationEntity = JSON.parseObject(json,ReEvaluationEntity.class);
 			evaluationEntity.setResumeId((Integer)values[0]);
 			Integer eInteger = reEvaluationDao.addEvaluation(evaluationEntity);
-			reportIdStr = eInteger.toString();
+			if (eInteger != null) {
+				id = eInteger;
+			}	
 			break;
 		case "education":
-			List<ReEducationEntity> list = JSON.parseArray(json,ReEducationEntity.class);
-			for(ReEducationEntity reEducationEntity:list){
-				reEducationEntity.setResumeId((Integer)values[0]);
-				Integer tmInteger = reEducationDao.addEducation(reEducationEntity);
-				reportIdStr += tmInteger.toString()+" ";
-			}
+			ReEducationEntity educationEntity = JSON.parseObject(json,ReEducationEntity.class);
+			Integer tmInteger = reEducationDao.addEducation(educationEntity);
+			if (tmInteger != null) {
+				id = tmInteger;
+			}			
 			break;
 		case "internship":
-			List<ReInternshipEntity> internshipEntities = JSON.parseArray(json,ReInternshipEntity.class);
-			for(ReInternshipEntity reInternshipEntity:internshipEntities){
-				reInternshipEntity.setResumeId((Integer)values[0]);
-				Integer tmInteger = reInternshipDao.addInternship(reInternshipEntity);
-				reportIdStr += tmInteger.toString()+" ";
-			}
+			ReInternshipEntity internshipEntities = JSON.parseObject(json,ReInternshipEntity.class);
+			tmInteger = reInternshipDao.addInternship(internshipEntities);
+			if (tmInteger != null) {
+				id = tmInteger;
+			}		
 			break;
 		case "schoolExp":
-			List<ReSchoolExpEntity> schoolExpEntities = JSON.parseArray(json,ReSchoolExpEntity.class);
-			for (ReSchoolExpEntity reSchoolExpEntity:schoolExpEntities){
-				reSchoolExpEntity.setResumeId((Integer)values[0]);
-				Integer tmInteger = reSchoolExpDao.addSchoolExp(reSchoolExpEntity);
-				reportIdStr += tmInteger.toString()+" ";
-			}
+			ReSchoolExpEntity schoolExpEntities = JSON.parseObject(json,ReSchoolExpEntity.class);
+			tmInteger = reSchoolExpDao.addSchoolExp(schoolExpEntities);
+			if (tmInteger != null) {
+				id = tmInteger;
+			}	
 			break;
 		case "science":
-			List<ReScienceEntity> scienceEntities = JSON.parseArray(json,ReScienceEntity.class);
-			for (ReScienceEntity scienceEntity : scienceEntities){
-				scienceEntity.setResumeId((Integer)values[0]);
-				Integer tmInteger = reScienceDao.addScience(scienceEntity);
-				reportIdStr += tmInteger.toString()+" ";
-			}
+			ReScienceEntity scienceEntities = JSON.parseObject(json,ReScienceEntity.class);
+			tmInteger = reScienceDao.addScience(scienceEntities);
+			if (tmInteger != null) {
+				id = tmInteger;
+			}	
 			break;
-
 		default:
 			break;
 		}
-		return reportIdStr;
+		return id;
 	}
 
 	public ResumeEntity queryResume(int resumeId){
