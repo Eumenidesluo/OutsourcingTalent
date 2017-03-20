@@ -30,8 +30,13 @@ public class ResumeDaoImpl extends HibernateDaoSupport implements ResumeDao {
 
 	}
 
-	public void updateResume(ResumeEntity entity) {
-		getHibernateTemplate().update(entity);
+	public Boolean updateResume(ResumeEntity entity) {
+		try{
+			getHibernateTemplate().update(entity);
+		}catch(Exception e){
+			return false;
+		}
+		return true;
 		
 	}
 	public List<?> findResume(int userId) {

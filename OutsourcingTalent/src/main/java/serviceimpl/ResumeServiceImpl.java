@@ -1,5 +1,6 @@
 package serviceimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,51 +103,51 @@ public class ResumeServiceImpl implements ResumeService {
 		}else
 			return null;
 	}
-	public String queryPartByResumeId(String partName,int resumeId){
-		String returnString;
+	public List<?> queryPartByResumeId(String partName,int resumeId){
+		List<?> list = new ArrayList<>();
 		switch (partName) {
 		case "education":
-			returnString = JSON.toJSONString(reEducationDao.findEducationsByResumeId(resumeId));
+			list = reEducationDao.findEducationsByResumeId(resumeId);
 			break;
 		case "internship":
-			returnString = JSON.toJSONString(reInternshipDao.findInternshipsByResumeId(resumeId));
+			list = reInternshipDao.findInternshipsByResumeId(resumeId);
 			break;
 		case "schoolExp":
-			returnString = JSON.toJSONString(reSchoolExpDao.findExpsByResumeId(resumeId));
+			list = reSchoolExpDao.findExpsByResumeId(resumeId);
 		case "science":
-			returnString = JSON.toJSONString(reScienceDao.findSciencesByResumeId(resumeId));
+			list = reScienceDao.findSciencesByResumeId(resumeId);
 			break;
 		case "evaluation":
-			returnString = JSON.toJSONString(reEducationDao.findEducationsByResumeId(resumeId));
+			list = reEducationDao.findEducationsByResumeId(resumeId);
 			break;
 		default:
-			returnString = "Unknown parameter";
+			list = null;
 			break;
 		}
-		return returnString;
+		return list;
 	}
-	public String queryPartByMainId(String partName,int Id){
-		String returnString;
+	public Object queryPartByMainId(String partName,int Id){
+		Object object ;
 		switch (partName) {
 		case "education":
-			returnString = JSON.toJSONString(reEducationDao.findByEducationId(Id));
+			object = reEducationDao.findByEducationId(Id);
 			break;
 		case "internship":
-			returnString = JSON.toJSONString(reInternshipDao.findInternshipByinternshioId(Id));
+			object = reInternshipDao.findInternshipByinternshioId(Id);
 			break;
 		case "schoolExp":
-			returnString = JSON.toJSONString(reSchoolExpDao.findExpBySchoolExpId(Id));
+			object = reSchoolExpDao.findExpBySchoolExpId(Id);
 		case "science":
-			returnString = JSON.toJSONString(reScienceDao.findScienceByScienceId(Id));
+			object = reScienceDao.findScienceByScienceId(Id);
 			break;
 		case "evaluation":
-			returnString = JSON.toJSONString(reEducationDao.findByEducationId(Id));
+			object = reEducationDao.findByEducationId(Id);
 			break;
 		default:
-			returnString = "Unknown parameter";
+			object = null;
 			break;
 		}
-		return returnString;
+		return object;
 	}
 
 	public Boolean deleteResume(int resumeId){
@@ -154,6 +155,8 @@ public class ResumeServiceImpl implements ResumeService {
 	}
 	public Boolean deletePartById(int Id,String partName){
 		switch (partName) {
+		case "evaluation":
+			return reEvaluationDao.deleteEvaluation(Id);
 		case "education":
 			return reEducationDao.deleteEducation(reEducationDao.findByEducationId(Id));
 		case "internship":
@@ -166,86 +169,66 @@ public class ResumeServiceImpl implements ResumeService {
 			return false;
 		}
 	}
-	public Boolean updateSingle(String json,String partName){
-		
-		if (partName.equals("resume")) {
-			ResumeEntity entity = JSON.parseObject(json, ResumeEntity.class);
-			if (entity == null) {
-				return false;
-			}
-			try {
-				resumeDao.updateResume(entity);
-			} catch (Exception e) {
-				return false;
-			}
-		}else if (partName.equals("evaluation")) {
-			ReEvaluationEntity entity = JSON.parseObject(json,ReEvaluationEntity.class);
-			if (entity == null) {
-				return false;
-			}
-			try {
-				reEvaluationDao.updateEvaluation(entity);
-			} catch (Exception e) {
-				return false;
-			}
-		}
-		return true;
-	}
 
-	public String updateParts(String json,String partName){
-		String returnStr = "";
+	public Boolean updatePart(String json,String partName){
 		switch (partName) {
-		case "education":
-			List<ReEducationEntity> educationEntities = JSON.parseArray(json, ReEducationEntity.class);
-			if (educationEntities == null) {
-				return returnStr;
+		case "resume":
+			ResumeEntity resumeEntity = JSON.parseObject(json,ResumeEntity.class);
+			if (resumeEntity == null) {
+				return false;
 			}
-			for(ReEducationEntity educationEntity:educationEntities){
-				if(reEducationDao.updateEducation(educationEntity))
-					returnStr += "S";
-				else
-					returnStr += "F";
+			if (resumeDao.updateResume(resumeEntity)) {
+				return true;
+			}
+			break;
+		case "evaluation":
+			ReEvaluationEntity evaluationEntity = JSON.parseObject(json,ReEvaluationEntity.class);
+			if (evaluationEntity == null) {
+				return false;
+			}
+			if (reEvaluationDao.updateEvaluation(evaluationEntity)) {
+				return true;
+			}
+			break;
+		case "education":
+			ReEducationEntity educationEntity = JSON.parseObject(json, ReEducationEntity.class);
+			if (educationEntity == null) {
+				return false;
+			}
+			if (reEducationDao.updateEducation(educationEntity)) {
+				return true;
 			}
 			break;
 		case "internship":
-			List<ReInternshipEntity> internshipEntities = JSON.parseArray(json, ReInternshipEntity.class);
-			if (internshipEntities == null) {
-				return returnStr;
+			ReInternshipEntity internshipEntity = JSON.parseObject(json, ReInternshipEntity.class);
+			if (internshipEntity == null) {
+				return false;
 			}
-			for(ReInternshipEntity internshipEntity:internshipEntities){
-				if(reInternshipDao.updateInternship(internshipEntity))
-					returnStr += "S";
-				else
-					returnStr += "F";
+			if (reInternshipDao.updateInternship(internshipEntity)) {
+				return true;
 			}
 			break;
 		case "schoolExp":
-			List<ReSchoolExpEntity> schoolExpEntities = JSON.parseArray(json, ReSchoolExpEntity.class);
-			if (schoolExpEntities == null) {
-				return returnStr;
+			ReSchoolExpEntity schoolExpEntity = JSON.parseObject(json, ReSchoolExpEntity.class);
+			if (schoolExpEntity == null) {
+				return false;
 			}
-			for(ReSchoolExpEntity schoolExpEntity:schoolExpEntities){
-				if(reSchoolExpDao.updateSchoolExp(schoolExpEntity))
-					returnStr += "S";
-				else
-					returnStr += "F";
+			if (reSchoolExpDao.updateSchoolExp(schoolExpEntity)) {
+				return true;
 			}
 			break;
 		case "science":
-			List<ReScienceEntity> scienceEntities = JSON.parseArray(json, ReScienceEntity.class);
-			if (scienceEntities == null) {
-				return returnStr;
+			ReScienceEntity scienceEntity = JSON.parseObject(json, ReScienceEntity.class);
+			if (scienceEntity == null) {
+				return false;
 			}
-			for(ReScienceEntity scienceEntity:scienceEntities){
-				if(reScienceDao.updateScience(scienceEntity))
-					returnStr += "S";
-				else
-					returnStr += "F";
+			if (reScienceDao.updateScience(scienceEntity)) {
+				return true;
 			}
 			break;
 		default:
-			return returnStr;
+			return false;
 		}
-		return returnStr;
+		return false;
 	}
 }

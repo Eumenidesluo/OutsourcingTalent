@@ -1,14 +1,15 @@
 package service;
 
+import java.util.List;
+
 import entity.ResumeEntity;
 
 public interface ResumeService {
 	public String addResumeInformations(String partName,String json,Object... values);
 	public ResumeEntity queryResume(int resumeId);
-	public String queryPartByResumeId(String partName,int resumeId);
-	public String queryPartByMainId(String partName,int Id);
+	public List<?> queryPartByResumeId(String partName,int resumeId);
+	public Object queryPartByMainId(String partName,int Id);
 	public Boolean deleteResume(int resumeId);
 	public Boolean deletePartById(int Id,String partName);
-	public Boolean updateSingle(String json,String partName);
-	public String updateParts(String json,String partName);
+	public Boolean updatePart(String json,String partName);
 }

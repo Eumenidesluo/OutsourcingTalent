@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -217,96 +218,205 @@ public class ResumeController {
 	}
 	
 	/**
-	 * @param request 根据isResumeId判断是查询单个部分信息还是全部部分信息，Id可以解读为resumeId或者部分Id
-	 * @return 查询到的List<?>的Json或错误信息
-	 */
+     * <p>接口名称：queryPart
+     * <p>主要描述：查询指定简历的某个项目
+     * <p>访问方式：post
+     * <p>URL: /resume/queryPart
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * Id			Integer		Y		null	查询的简历的Id
+     * isResumeId	Integer		Y		null	判断是查询简历大项还是某个子项目
+     * partName		Integer		Y		null	查询的项目的名称
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     result:查询结果
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value="/queryPart")
 	@ResponseBody
-	public String queryPart(HttpServletRequest request){
+	public String queryPart(HttpServletRequest request,HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String Id = request.getParameter("Id");
 		String isResumeId = request.getParameter("isResumeId");
 		String partName = request.getParameter("partName");
 		
 		if (isResumeId == null || Id == null || partName == null ) {
-			return "Invalid parameter";
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
 		if (isResumeId.equals("1")) {
-			return resumeService.queryPartByResumeId(partName, Integer.parseInt(Id));
+			List<?> list = resumeService.queryPartByResumeId(partName, Integer.parseInt(Id));
+			if (list == null) {
+				result.put("status", StatusCode.SQL_OP_ERR);
+				return JSON.toJSONString(result);
+			}
+			result.put("status", StatusCode.SUCCESS);
+			result.put("result", list);
+			return JSON.toJSONString(result);
 		}else if (isResumeId.equals("0")) {
-			return resumeService.queryPartByMainId(partName, Integer.parseInt(Id));
+			Object object = resumeService.queryPartByMainId(partName, Integer.parseInt(Id));
+			if (object == null) {
+				result.put("status", StatusCode.SQL_OP_ERR);
+				return JSON.toJSONString(result);
+			}
+			result.put("status", StatusCode.SUCCESS);
+			result.put("result", object);
+			return JSON.toJSONString(result);
 		}else {
-			return "Request Parameter error";
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
 		
 	}
 
 	/**
-	 * @param request 根据resumeId删除对应的简历信息
-	 * @return "success" 删除成功，其它信息 删除失败
-	 */
+     * <p>接口名称：deleteResume
+     * <p>主要描述：删除指定的简历
+     * <p>访问方式：post
+     * <p>URL: /resume/deleteResume
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * resumeId			Integer		Y		null	删除的简历的Id
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value="/deleteResume")
 	@ResponseBody
-	public String deleteResume(HttpServletRequest request){
+	public String deleteResume(HttpServletRequest request,HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String resumeId = request.getParameter("resumeId");
 		if (resumeId == null) {
-			return "Invalid parameter";
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
 		if (resumeService.deleteResume(Integer.parseInt(resumeId))) {
-			return "success";
-		}else
-			return "Unknown error";
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}else{
+			result.put("status", StatusCode.UNKNOW_ERROR);
+			return JSON.toJSONString(result);
+		}
 	}
 	
 	/**
-	 * 
-	 * @param request 需要删除的part的Ids
-	 * @return 返回String类型，对应Id删除成功则对应位置为S，否则为F
-	 */
+     * <p>接口名称：deletePart
+     * <p>主要描述：删除指定的项目的某一部分
+     * <p>访问方式：post
+     * <p>URL: /resume/deletePart
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * partName		String		Y		null	更新项目的名字
+     * Id			Integer		Y		Null	该部分的Id
+     * 
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value="/deletePart")
 	@ResponseBody
-	public String deletePart(HttpServletRequest request){
+	public String deletePart(HttpServletRequest request,HttpSession session) {
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String partName = request.getParameter("partName");
-		String ids = request.getParameter("Ids");
-		String[] idArray = ids.split(" ");
-		String retrunValue="";
-		for(String id:idArray){
-			if(resumeService.deletePartById(Integer.parseInt(id), partName))
-				retrunValue += "S";
-			else {
-				retrunValue += "F";
-			}
+		String id = request.getParameter("Id");
+		if (partName == null || id == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
 		}
-		return retrunValue;
-	}
-
-	/**
-	 * 
-	 * @param request update resume或evaluation等single部分
-	 * @return "success" or "failed"
-	 */
-	@RequestMapping(value="/updateReOrEva")
-	@ResponseBody
-	public String updateResumeOrEva(HttpServletRequest request){
-		String partName = request.getParameter("partName");
-		String json = request.getParameter("json");
 		
-		if(resumeService.updateSingle(json, partName))
-			return "success";
-		return "failed";
+		if (resumeService.deletePartById(Integer.parseInt(id), partName)) {
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}
+		result.put("status", StatusCode.UNKNOW_ERROR);
+		return JSON.toJSONString(result);
 	}
 	
 	/**
-	 * 
-	 * @param request update 允许多例的部分，参数为需要更新的partName
-	 * @return 返回String类型，对应Id更新成功则对应位置为S，否则为F
-	 */
+     * <p>接口名称：updateParts
+     * <p>主要描述：更新指定的项目的某一部分
+     * <p>访问方式：post
+     * <p>URL: /resume/updateParts
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * partName		String		Y		null	更新项目的名字
+     * json			String		Y		Null	更新后的内容
+     * 
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * <pre>
+     * 
+     */
 	@RequestMapping(value="/updateParts")
 	@ResponseBody
-	public String updateParts(HttpServletRequest request){
+	public String updateParts(HttpServletRequest request,HttpSession session){
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	
 		String partName = request.getParameter("partName");
 		String json = request.getParameter("json");
+		if (partName == null || json == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
 
-		return resumeService.updateParts(json, partName);
+		if(resumeService.updatePart(json, partName)) {
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}else{
+			result.put("status", StatusCode.UNKNOW_ERROR);
+			return JSON.toJSONString(result);
+		}
 		
 	}
 }
