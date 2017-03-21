@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.NoticeDao;
@@ -33,6 +34,15 @@ public class NoticeDaoImpl extends HibernateDaoSupport implements NoticeDao{
 			values.add((NoticeEntity)list.get(i));
 		}
 		return values;
+	}
+	@Override
+	public Boolean saveNotice(NoticeEntity entity) {
+		try {
+			getHibernateTemplate().save(entity);
+		} catch (DataAccessException e) {
+			return false;
+		}
+		return true;
 	}
 	
 
