@@ -11,4 +11,5 @@ public interface CoRecruitDao {
 	public CoRecruitEntity findRecruitByRecruitId(int recruitId);
 	public List<?> findRecruitsByCompanyId(int companyId);
 	public List<?> findRecruitsLimit(int begin,int max,String tag);
+	public List<?> findByKeyWord(String keyWord);
 }

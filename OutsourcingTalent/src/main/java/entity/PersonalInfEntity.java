@@ -17,7 +17,7 @@ import component.Sex;
  * Created by Eumenides on 2017/2/22.
  */
 @Entity
-@Table(name = "personal_inf", schema = "outsourcingtalent", catalog = "")
+@Table(name = "PERSONAL_INF", schema = "outsourcingtalent", catalog = "")
 public class PersonalInfEntity {
     private String email;
     private String name;

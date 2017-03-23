@@ -11,6 +11,3 @@ encoding//src/main/java/service/RegisterValidate.java=UTF-8
 encoding//src/main/java/serviceimpl/RegisterValidateImpl.java=GBK
 encoding//src/main/java/serviceimpl/SendEmailImpl.java=UTF-8
 encoding//src/main/resources/META_INF/applicationContext.xml=UTF-8
-encoding//src/test/java/daoimpl/CoRecruitDaoImplTest.java=UTF-8
-encoding//src/test/java/daoimpl/CompanyDaoImplTest.java=UTF-8
-encoding/<project>=GBK

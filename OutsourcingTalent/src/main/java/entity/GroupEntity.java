@@ -12,7 +12,7 @@ import javax.persistence.Table;
  * Created by Eumenides on 2017/2/22.
  */
 @Entity
-@Table(name = "group", schema = "outsourcingtalent", catalog = "")
+@Table(name = "GROUP", schema = "outsourcingtalent", catalog = "")
 public class GroupEntity {
     private int groupId;
     private String name;

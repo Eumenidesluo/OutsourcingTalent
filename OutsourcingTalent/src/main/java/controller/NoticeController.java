@@ -25,17 +25,38 @@ public class NoticeController {
 
 	@Autowired
 	NoticeDao noticeDao;
+	
+	/**
+     * <p>接口名称：send
+     * <p>主要描述：发送通知
+     * <p>访问方式：post
+     * <p>URL: /notice/send
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * notice   	String 		Y    	 NULL  通知体
+     * sendTo		Integer		Y		 2   	通知送往的ID号
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
 	@RequestMapping(value = "/send")
 	@ResponseBody
 	public String sendNotice(@RequestParam("notice") String notice,
 							@RequestParam("sendTo")Integer sendto,
 							HttpSession session) {
-		Map<String, Object> result = new HashMap<>();
-		String userId = session.getAttribute("userId").toString();
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
-		}
+		}//登录验证
 		if (notice == null || sendto == null) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);

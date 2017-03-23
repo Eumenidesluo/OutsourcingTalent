@@ -38,17 +38,35 @@ public class CoRecruitDaoImpl extends HibernateDaoSupport implements CoRecruitDa
 	
 	public List<?> findRecruitsLimit(int begin,int max,String tag){
 		Session session = getSessionFactory().getCurrentSession();
-		try {		
-			Query query = session.createQuery("from CoRecruitEntity e where e.label=?");
-			query.setString(0, tag);
+		if (tag == null) {
+			Query query = session.createQuery("from CoRecruitEntity e");
 			query.setFirstResult(begin);
 			query.setMaxResults(max);
 			List<?> list = query.list();
 			return list;
-		} catch(Exception e){
-			e.printStackTrace();
-			return null;
+		}else{
+			try {		
+				Query query = session.createQuery("from CoRecruitEntity e where e.label=?");
+				query.setString(0, tag);
+				query.setFirstResult(begin);
+				query.setMaxResults(max);
+				List<?> list = query.list();
+				return list;
+			} catch(Exception e){
+				e.printStackTrace();
+				return null;
+			}
 		}
 		
+	}
+
+	@Override
+	public List<?> findByKeyWord(String keyWord) {
+		keyWord = "%"+keyWord+"%";
+		List<?> list = getHibernateTemplate().find("from CoRecruitEntity as e where e.title like ?", keyWord);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
 	}
 }

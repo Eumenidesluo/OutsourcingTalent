@@ -11,4 +11,5 @@ public interface CompanyDao {
 	public void updateCompany(CompanyEntity entity);
 	public CompanyEntity findCompanyById(int Id);
 	public List<?> findComaniesByName(String name);
+	public List<?> findCompanyesByKey(String key);
 }

@@ -17,7 +17,7 @@ import javax.persistence.Transient;
  * Created by Eumenides on 2017/2/22.
  */
 @Entity
-@Table(name = "user", schema = "outsourcingtalent", catalog = "")
+@Table(name = "USER", schema = "outsourcingtalent", catalog = "")
 public class UserEntity {
     private Integer id;
     private String password;

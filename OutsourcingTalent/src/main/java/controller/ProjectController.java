@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -25,6 +26,49 @@ public class ProjectController {
 	@Autowired
 	ProjectService projectService;
 	
+	/**
+     * <p>接口名称：search
+     * <p>主要描述：查询记录(模糊查询)
+     * <p>访问方式：post
+     * <p>URL: /project/search
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * text   		String 		Y    	 NULL  查找关键字
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     projects：..
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/search")
+	@ResponseBody
+	public String search (HttpSession session,@RequestParam String text){
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登陆验证
+		
+		if (text == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		List<?> list = projectService.findProjectByKey(text);
+		if (list == null) {
+			result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
+		result.put("status", StatusCode.SUCCESS);
+		result.put("projects", list);
+		return JSON.toJSONString(result);
+	}
 	/**
      * <p>接口名称：release
      * <p>主要描述：公司发布项目
@@ -91,6 +135,8 @@ public class ProjectController {
      * <p>修改者:陈琦
      * 
      */
+	@RequestMapping(value = "/list")
+	@ResponseBody
 	public String list(HttpServletRequest request,HttpSession session) {
 		Map<String, Object> result = new HashMap<>();
     	Integer userId = (Integer) session.getAttribute("userId");

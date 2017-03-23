@@ -64,4 +64,10 @@ public class ProjectServiceImp implements ProjectService {
 		return list;
 	}
 
+	@Override
+	public List<?> findProjectByKey(String key) {
+		
+		return projectDao.findProjectsByKey(key);
+	}
+
 }

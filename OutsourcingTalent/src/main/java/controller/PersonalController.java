@@ -34,7 +34,7 @@ public class PersonalController {
      * <p>参数说明:
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
-     * personJson   Integer 		Y    	 NULL  用户Id
+     * personJson   Integer 		Y    	 NULL  用户信息
      * </pre>
      * <p>返回数据:JSON
      * <pre>

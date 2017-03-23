@@ -83,7 +83,8 @@ public class LoginController {
             }else
             	result.put("status", StatusCode.PASSWORD_OR_EMAIL_WRONG);
         }
-        return JSON.toJSONString(result);
+        String json = JSON.toJSONString(result);
+        return json;
     }
     
     /**

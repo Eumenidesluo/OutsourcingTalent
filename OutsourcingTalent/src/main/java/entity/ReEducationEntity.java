@@ -20,7 +20,7 @@ import component.Education;
  * Created by Eumenides on 2017/2/22.
  */
 @Entity
-@Table(name = "re_education", schema = "outsourcingtalent", catalog = "")
+@Table(name = "RE_EDUCATION", schema = "outsourcingtalent", catalog = "")
 public class ReEducationEntity {
     private int educationId;
     private int resumeId;

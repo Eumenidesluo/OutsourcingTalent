@@ -12,4 +12,5 @@ public interface ProjectDao {
 	public ProjectEntity findProjectByProjectId(int projectId);
 	public List<?> findProjectByCompanyId(int CompanyId);
 	public List<?> findProjectsLimit(int begin,int max);
+	public List<?> findProjectsByKey(String key);
 }

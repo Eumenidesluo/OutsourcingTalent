@@ -42,4 +42,15 @@ public class CompanyDaoImpl extends HibernateDaoSupport implements CompanyDao {
 		return list;
 	}
 
+	@Override
+	public List<?> findCompanyesByKey(String key) {
+		key = "%"+key+"%";
+		List<?> list = getHibernateTemplate().find("from CompanyEntity e where e.name like ?", key);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
+	}
+	
+
 }

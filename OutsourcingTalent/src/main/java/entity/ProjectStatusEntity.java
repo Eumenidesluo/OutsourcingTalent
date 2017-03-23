@@ -10,7 +10,7 @@ import javax.persistence.Table;
  * Created by Eumenides on 2017/2/25.
  */
 @Entity
-@Table(name = "project_status", schema = "outsourcingtalent", catalog = "")
+@Table(name = "PROJECT_STATUS", schema = "outsourcingtalent", catalog = "")
 public class ProjectStatusEntity {
     private int projectId;
     private Integer isAppoint;

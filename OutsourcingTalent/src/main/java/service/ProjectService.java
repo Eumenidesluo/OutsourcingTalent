@@ -15,4 +15,6 @@ public interface ProjectService {
 	public ProjectEntity queryProject(Integer projectId);
 	
 	public List<?> queryManyProjects(int begin,int max);
+	
+	public List<?> findProjectByKey(String key);
 }

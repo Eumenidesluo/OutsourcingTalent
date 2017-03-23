@@ -14,7 +14,7 @@ import javax.persistence.Table;
  * Created by Eumenides on 2017/2/25.
  */
 @Entity
-@Table(name = "project", schema = "outsourcingtalent", catalog = "")
+@Table(name = "PROJECT", schema = "outsourcingtalent", catalog = "")
 public class ProjectEntity {
     private int projectId;
     private String title;

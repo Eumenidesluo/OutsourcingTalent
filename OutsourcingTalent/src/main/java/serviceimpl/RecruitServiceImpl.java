@@ -36,5 +36,9 @@ public class RecruitServiceImpl implements RecruitService{
 		}
 		return beanList;
 	}
+	@Override
+	public List<?> findByKey(String key) {
+		return coRecruitDao.findByKeyWord(key);
+	}
 
 }

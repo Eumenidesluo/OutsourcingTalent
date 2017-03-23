@@ -63,4 +63,14 @@ public class ProjectDaoImpl extends HibernateDaoSupport implements ProjectDao {
 		}
 	}
 
+	@Override
+	public List<?> findProjectsByKey(String key) {
+		key = "%" + key + "%";
+		List<?> list = getHibernateTemplate().find("from ProjectEntity as e where e.title like ?", key);
+		if (list.size() == 0) {
+			return null;
+		}
+		return list;
+	}
+
 }

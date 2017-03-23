@@ -47,12 +47,12 @@ public class GroupController {
 	@RequestMapping(value="/create")
 	@ResponseBody
 	public String createGroup(HttpServletRequest request,HttpSession session){
-		Map<String, Object> result = new HashMap<>();
-    	Integer userId = (Integer) session.getAttribute("userId");
-    	if (userId == null) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
-		}//登录验证
+		}
 
 		Integer newGroupId = groupService.createGroup(userId);		
 		if (newGroupId == null) {
@@ -88,9 +88,9 @@ public class GroupController {
 	@RequestMapping(value="/invite")
 	@ResponseBody
 	public String inviteJoin(HttpServletRequest request,HttpSession session){
-		Map<String, Object> result = new HashMap<>();
-    	Integer userId = (Integer) session.getAttribute("userId");
-    	if (userId == null) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}//登录验证
@@ -133,13 +133,12 @@ public class GroupController {
 	@RequestMapping(value="/deleteMember")
 	@ResponseBody
 	public String deleteMember(HttpServletRequest request,HttpSession session){
-		Map<String, Object> result = new HashMap<>();
-    	Integer userId = (Integer) session.getAttribute("userId");
-    	if (userId == null) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}//登录验证
-    	
 		String groupId = request.getParameter("groupId");
 		String deleteId = request.getParameter("deleteId");	
 		if (groupId == null || deleteId == null ) {
@@ -177,9 +176,9 @@ public class GroupController {
 	@RequestMapping(value = "/findGroup")
 	@ResponseBody
 	public String findGroup(HttpServletRequest request,HttpSession session){
-		Map<String, Object> result = new HashMap<>();
-    	Integer userId = (Integer) session.getAttribute("userId");
-    	if (userId == null) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}//登录验证
