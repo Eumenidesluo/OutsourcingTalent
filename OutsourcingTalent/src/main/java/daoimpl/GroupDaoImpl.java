@@ -33,5 +33,7 @@ public class GroupDaoImpl extends HibernateDaoSupport implements GroupDao {
 		}
 		return (GroupEntity)list.get(0);
 	}
+	
+	
 
 }

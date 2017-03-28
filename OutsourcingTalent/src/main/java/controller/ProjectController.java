@@ -214,7 +214,7 @@ public class ProjectController {
      * <pre>
      * {
      *     status: ${StatusCode}, 参见状态码表
-     *     projects：..
+     *     list：..
      * }
      * </pre>
      * <p>修改者:陈琦
@@ -240,7 +240,7 @@ public class ProjectController {
 			return JSON.toJSONString(result);
 		}
 		result.put("status", StatusCode.SUCCESS);
-		result.put("projects", list);
+		result.put("list", list);
 		return JSON.toJSONString(result);
 	}
 	/**

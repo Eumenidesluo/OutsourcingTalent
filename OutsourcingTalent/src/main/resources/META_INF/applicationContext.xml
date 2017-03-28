@@ -223,6 +223,7 @@
   	<property name="groupDao" ref="groupDaoTarget"></property>
   	<property name="userDao" ref="userDaoTarget"></property>
   	<property name="ugRelateDao" ref="uGRelateDaoTarget"></property>
+  	<property name="personalInfDao" ref="personalInfDaoTarget"></property>
   </bean>
   <bean id="groupService" parent="transactionBase">
     <property name="target" ref="groupServiceTarget"/>

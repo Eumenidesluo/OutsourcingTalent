@@ -214,7 +214,7 @@ public class RecruitController {
      * <pre>
      * {
      *     status: ${StatusCode}, 参见状态码表
-     *     recruits：..
+     *     list：..
      * }
      * </pre>
      * <p>修改者:陈琦
@@ -239,7 +239,7 @@ public class RecruitController {
 			return JSON.toJSONString(result);
 		}
 		result.put("status", StatusCode.SUCCESS);
-		result.put("recruit", list);
+		result.put("list", list);
 		return JSON.toJSONString(result);
 	}
 	/**

@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,12 +10,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
-import entity.GroupEntity;
+import entity.MemberBean;
+import entity.RelateUserGroupBean;
 import service.GroupService;
 
 @Controller
@@ -25,6 +28,39 @@ public class GroupController {
 	GroupService groupService;
 	
 	/**
+     * <p>接口名称：init
+     * <p>主要描述：获取个人的群组信息
+     * <p>访问方式：post
+     * <p>URL: /group/init
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     informations：List<RelateUserGroupBean> 若place字段为0，则为队长，否则为队员
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/init")
+	@ResponseBody
+	public String init(HttpSession session){
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}
+		List<RelateUserGroupBean> list = groupService.getUserGroupInfo(userId);
+		result.put("status", StatusCode.SUCCESS);
+		result.put("informations",list);
+		return JSON.toJSONString(result);
+	}
+	/**
      * <p>接口名称：create
      * <p>主要描述：创建群组
      * <p>访问方式：post
@@ -32,7 +68,7 @@ public class GroupController {
      * <p>参数说明:
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
-     * creator   	Integer 		Y    	 NULL  创建者Id
+     * gourpName	String		Y		NUll	群组名
      * </pre>
      * <p>返回数据:JSON
      * <pre>
@@ -46,15 +82,19 @@ public class GroupController {
      */
 	@RequestMapping(value="/create")
 	@ResponseBody
-	public String createGroup(HttpServletRequest request,HttpSession session){
+	public String createGroup(HttpSession session,@RequestParam String groupName){
 		Map< String, Object> result = new HashMap<>();
 		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}
-
-		Integer newGroupId = groupService.createGroup(userId);		
+		if (groupName == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		
+		Integer newGroupId = groupService.createGroup(userId,groupName);		
 		if (newGroupId == null) {
 			result.put("status", StatusCode.SQL_OP_ERR);
 			return JSON.toJSONString(result);
@@ -132,20 +172,18 @@ public class GroupController {
      */
 	@RequestMapping(value="/deleteMember")
 	@ResponseBody
-	public String deleteMember(HttpServletRequest request,HttpSession session){
+	public String deleteMember(HttpSession session,@RequestParam Integer groupId,@RequestParam Integer deleteId){
 		Map< String, Object> result = new HashMap<>();
 		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}//登录验证
-		String groupId = request.getParameter("groupId");
-		String deleteId = request.getParameter("deleteId");	
 		if (groupId == null || deleteId == null ) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		if (groupService.deleteMenber(Integer.parseInt(groupId), Integer.parseInt(deleteId))){
+		if (groupService.deleteMenber(groupId, deleteId)){
 			result.put("status", StatusCode.SUCCESS);
 			return JSON.toJSONString(result);
 		}
@@ -154,10 +192,10 @@ public class GroupController {
 	}
 
 	/**
-     * <p>接口名称：findGroup
-     * <p>主要描述：根据Id查找群组
+     * <p>接口名称：queryGroupMembers
+     * <p>主要描述：查询群组成员
      * <p>访问方式：post
-     * <p>URL: /group/findGroup
+     * <p>URL: /group/query
      * <p>参数说明:
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
@@ -167,15 +205,15 @@ public class GroupController {
      * <pre>
      * {
      *     status: ${StatusCode}, 参见状态码表
-     *     group:查找到的团队信息
+     *     members:List<MemberBean>团队成员信息
      * }
      * </pre>
      * <p>修改者:陈琦
      * 
      */
-	@RequestMapping(value = "/findGroup")
+	@RequestMapping(value = "/query")
 	@ResponseBody
-	public String findGroup(HttpServletRequest request,HttpSession session){
+	public String findGroup(@RequestParam Integer groupId,HttpSession session){
 		Map< String, Object> result = new HashMap<>();
 		Integer userId = (Integer)session.getAttribute("userId");
 		if (userId == null) {
@@ -183,19 +221,13 @@ public class GroupController {
 			return JSON.toJSONString(result);
 		}//登录验证
     	
-		String groupId = request.getParameter("groupId");
 		if (groupId == null) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		
-		GroupEntity groupEntity = groupService.findGroup(Integer.parseInt(groupId));
-		if (groupEntity == null) {
-			result.put("status", StatusCode.SQL_OP_ERR);
-			return JSON.toJSONString(result);
-		}
+		List<MemberBean> memebers = groupService.queryMembers(groupId);
 		result.put("status", StatusCode.SUCCESS);
-		result.put("group", groupEntity);
+		result.put("members", memebers);
 		return JSON.toJSONString(result);
 	}
 	

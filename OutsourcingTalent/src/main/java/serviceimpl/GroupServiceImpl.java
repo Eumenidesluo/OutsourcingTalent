@@ -1,12 +1,18 @@
 package serviceimpl;
 
-import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import dao.GroupDao;
+import dao.PersonalInfDao;
 import dao.UGRelateDao;
 import dao.UserDao;
 import entity.GroupEntity;
+import entity.MemberBean;
+import entity.PersonalInfEntity;
+import entity.RelateUserGroupBean;
 import entity.RelateUserGroupEntity;
+import entity.UserEntity;
 import service.GroupService;
 
 public class GroupServiceImpl implements GroupService{
@@ -14,8 +20,17 @@ public class GroupServiceImpl implements GroupService{
 	GroupDao groupDao;
 	UserDao userDao;
 	UGRelateDao ugRelateDao;
+	PersonalInfDao personalInfDao;
 	
 	
+	public PersonalInfDao getPersonalInfDao() {
+		return personalInfDao;
+	}
+
+	public void setPersonalInfDao(PersonalInfDao personalInfDao) {
+		this.personalInfDao = personalInfDao;
+	}
+
 	public UGRelateDao getUgRelateDao() {
 		return ugRelateDao;
 	}
@@ -40,111 +55,77 @@ public class GroupServiceImpl implements GroupService{
 		this.userDao = userDao;
 	}
 
-	public Integer createGroup(Integer creatorId) {
+	public Integer createGroup(Integer creatorId,String gourpName) {
 		GroupEntity groupEntity = new GroupEntity();
 		groupEntity.setLeaderId(creatorId);
-		groupEntity.setAmount(1);
-		RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
+		groupEntity.setName(gourpName);
 		Integer groupId =  groupDao.addGroup(groupEntity);
-		relateEntity.setUserId(creatorId);
-		relateEntity.setGroupId(groupId);
-		relateEntity.setPlace(0);
-		ugRelateDao.addRelate(relateEntity);
 		return groupId;
 		
 	}
 	
 	@Override
 	public Boolean inviteMember(Integer groupId, Integer inviteId) {
-		GroupEntity groupEntity = groupDao.findGroup(groupId) ;
-		if (groupEntity ==null) {
+		RelateUserGroupEntity entity = new RelateUserGroupEntity();
+		entity.setGroupId(groupId);
+		entity.setUserId(inviteId);
+		entity.setPlace(1);
+		if (ugRelateDao.addRelate(entity)<0) {
 			return false;
 		}
-		Integer number = groupEntity.getAmount();
-		if (number > 9||number < 1){
-			return false;
-		}
-		Integer index = addMember(groupEntity, inviteId);
-		if (index != -1){
-			groupDao.updateGroup(groupEntity);
-			RelateUserGroupEntity relateEntity = new RelateUserGroupEntity();
-			relateEntity.setGroupId(groupId);
-			relateEntity.setUserId(inviteId);
-			relateEntity.setPlace(index);
-			ugRelateDao.addRelate(relateEntity);
-			return true;
-		}
-		
-		return false;
+		return true;
 	}
 	
-	private Integer addMember(GroupEntity groupEntity,Integer inviteId) {
-		Class<GroupEntity> groupClazz = GroupEntity.class;
-		for(Integer number = 1;number < 10 ;number++){
-			String methodName = "getMemberId"+number;
-			try {
-				Method method = groupClazz.getMethod(methodName);
-				if(method.invoke(groupEntity) == null){
-					methodName = "setMemberId"+number;
-					method =groupClazz.getMethod(methodName, Integer.class);
-					method.invoke(groupEntity, inviteId);
-					groupEntity.setAmount(number+1);
-					return number;
-				}
-					
-			} catch (Exception e) {
-				e.printStackTrace();
-				return -1;
-			} 
-		}
-		return -1;
-	}
 	
-	public GroupEntity findGroup(Integer groupId){
-		
-		return groupDao.findGroup(groupId);
+	public List<MemberBean> queryMembers(Integer groupId){
+		List<?> relateList = ugRelateDao.findRelatesByGroupId(groupId);
+		List<MemberBean> members = new ArrayList<>();
+		for(Object o:relateList) {
+			RelateUserGroupEntity entity = (RelateUserGroupEntity)o;
+			UserEntity user = userDao.findById(String.valueOf(entity.getUserId()));
+			PersonalInfEntity psersonal = personalInfDao.findByEmail(user.getEmail());
+			members.add(new MemberBean(user.getId(),psersonal.getName()));
+		}
+		return members;
 	}
 	
 	public Boolean deleteMenber(Integer groupId, Integer deleteId) {
-		
-		GroupEntity groupEntity = groupDao.findGroup(groupId) ;
-		if (groupEntity ==null) {
-			return false;
-		}
-		Integer number = groupEntity.getAmount();
-		if (number > 10||number < 2){
-			return false;
-		}
-		
-		if (deleteExcute(groupEntity, deleteId)){
-			groupDao.updateGroup(groupEntity);
-			ugRelateDao.deleteRelate(ugRelateDao.findRelate(deleteId, groupId));
-			return true;
-		}
-		return false;
+		return ugRelateDao.deleteMember(deleteId, groupId);
 	}
 	
-	private Boolean deleteExcute(GroupEntity groupEntity,Integer deleteId){
-		Class<GroupEntity> groupClazz = GroupEntity.class;
-		for(Integer number = 1;number < 10 ;number++){
-			String methodName = "getMemberId"+number;
-			try {
-				Method method = groupClazz.getMethod(methodName);
-				if(method.invoke(groupEntity) == deleteId){
-					methodName = "setMemberId"+number;
-					method =groupClazz.getMethod(methodName,Integer.class);
-					Integer value = null;
-					method.invoke(groupEntity,value);
-					groupEntity.setAmount(number);
-					return true;
-				}
-					
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			} 
+//	private Boolean deleteExcute(GroupEntity groupEntity,Integer deleteId){
+//		Class<GroupEntity> groupClazz = GroupEntity.class;
+//		for(Integer number = 1;number < 10 ;number++){
+//			String methodName = "getMemberId"+number;
+//			try {
+//				Method method = groupClazz.getMethod(methodName);
+//				if(method.invoke(groupEntity) == deleteId){
+//					methodName = "setMemberId"+number;
+//					method =groupClazz.getMethod(methodName,Integer.class);
+//					Integer value = null;
+//					method.invoke(groupEntity,value);
+//					groupEntity.setAmount(number);
+//					return true;
+//				}
+//					
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//				return false;
+//			} 
+//		}
+//		return false;
+//	}
+
+	@Override
+	public List<RelateUserGroupBean> getUserGroupInfo(Integer userId) {
+		List<?> eList = ugRelateDao.findRelatesByUserId(userId);
+		List<RelateUserGroupBean> list = new ArrayList<>();
+		for(Object o:eList) {
+			RelateUserGroupEntity entity = (RelateUserGroupEntity)o;
+			GroupEntity groupEntity = groupDao.findGroup(entity.getGroupId());
+			list.add(new RelateUserGroupBean(entity,groupEntity.getName()));
 		}
-		return false;
+		return list;
 	}
 	
 }
