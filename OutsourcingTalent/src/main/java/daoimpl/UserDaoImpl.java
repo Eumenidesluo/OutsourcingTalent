@@ -18,7 +18,7 @@ public class UserDaoImpl extends HibernateDaoSupport implements UserDao {
 
 
     public void save(UserEntity user) {
-        getHibernateTemplate().save(user);
+        getHibernateTemplate().saveOrUpdate(user);
     }
 
     public void savePassword() {

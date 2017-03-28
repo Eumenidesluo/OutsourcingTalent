@@ -4,6 +4,7 @@ import java.util.List;
 
 //import entity.PersonalInfEntity;
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.PersonalInfDao;
@@ -20,9 +21,14 @@ public class PersonalInfDaoImpl extends HibernateDaoSupport implements PersonalI
     }
 
 
-	public void update(PersonalInfEntity entity) {
-//		PersonalInfEntity tempEntity =findByExam(entity.getEmail());
-		getHibernateTemplate().update(entity);
+	public Boolean update(PersonalInfEntity entity) {
+		try {
+			getHibernateTemplate().update(entity);
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 	public PersonalInfEntity findByEmail(String  email) {

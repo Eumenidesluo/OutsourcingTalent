@@ -1,6 +1,8 @@
 package entity;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -25,6 +27,22 @@ public class ReSchoolExpEntity {
     private String city;
     private String description;
 
+   public ReSchoolExpEntity() {
+    	activity = "";
+    	role = "";
+    	city = "";
+    	
+    	try {
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String nowDate = simpleDateFormat.format(new java.util.Date(System.currentTimeMillis()));
+			java.util.Date utilDate = simpleDateFormat.parse(nowDate);
+			Date sqlDate = new Date(utilDate.getTime());
+			start = sqlDate;
+			end = sqlDate;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+	}
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "school_exp_Id")

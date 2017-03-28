@@ -23,7 +23,7 @@ public class ReInternshipEntity {
     private Date startTime;
     private Date endtime;
     private String city;
-    private String describe;
+    private String description;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -97,14 +97,14 @@ public class ReInternshipEntity {
     }
 
     @Basic
-    @Column(name = "describe")
-    public String getDescribe() {
-        return describe;
-    }
+    @Column(name = "description")
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	@Override
 	public int hashCode() {
@@ -112,7 +112,7 @@ public class ReInternshipEntity {
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((company == null) ? 0 : company.hashCode());
-		result = prime * result + ((describe == null) ? 0 : describe.hashCode());
+		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((endtime == null) ? 0 : endtime.hashCode());
 		result = prime * result + internshipId;
 		result = prime * result + ((position == null) ? 0 : position.hashCode());
@@ -140,10 +140,10 @@ public class ReInternshipEntity {
 				return false;
 		} else if (!company.equals(other.company))
 			return false;
-		if (describe == null) {
-			if (other.describe != null)
+		if (description == null) {
+			if (other.description != null)
 				return false;
-		} else if (!describe.equals(other.describe))
+		} else if (!description.equals(other.description))
 			return false;
 		if (endtime == null) {
 			if (other.endtime != null)
@@ -167,5 +167,6 @@ public class ReInternshipEntity {
 		return true;
 	}
 
+    
     
 }

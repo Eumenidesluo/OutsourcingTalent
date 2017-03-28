@@ -29,7 +29,11 @@ public class CoRecruitDaoImpl extends HibernateDaoSupport implements CoRecruitDa
 	}
 
 	public CoRecruitEntity findRecruitByRecruitId(int recruitId) {
-		return (CoRecruitEntity)getHibernateTemplate().find("from CoRecruitEntity e where e.recruitId=?", recruitId).get(0);
+		List<?> list = getHibernateTemplate().find("from CoRecruitEntity e where e.recruitId=?", recruitId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return (CoRecruitEntity)list.get(0);
 	}
 
 	public List<?> findRecruitsByCompanyId(int companyId) {

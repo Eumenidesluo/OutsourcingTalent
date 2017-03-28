@@ -1,8 +1,10 @@
 package daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
 import dao.ReSchoolExpDao;
@@ -41,7 +43,13 @@ public class ReSchoolExpDaoImpl extends HibernateDaoSupport implements ReSchoolE
 	}
 
 	public List<?> findExpsByResumeId(int resumeId) {
-		return getHibernateTemplate().find("from ReSchoolExpEntity e where e.resumeId=?", resumeId);
+		List<?> list;
+		try {
+			list = getHibernateTemplate().find("from ReSchoolExpEntity e where e.resumeId=?", resumeId);
+		} catch (DataAccessException e) {
+			list = new ArrayList<>();
+		}
+		return list;
 	}
 
 }

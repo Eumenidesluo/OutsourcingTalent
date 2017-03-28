@@ -1,5 +1,7 @@
 package daoimpl;
 
+import java.util.List;
+
 import org.hibernate.SessionFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
@@ -30,12 +32,16 @@ public class ReEvaluationDaoImpl extends HibernateDaoSupport implements ReEvalua
 	}
 
 	public ReEvaluationEntity findEvaluation(int resumeId) {
-		return (ReEvaluationEntity)getHibernateTemplate().find("from ReEvaluationEntity e where e.resumeId=?", resumeId).get(0);
+		List<?> list = getHibernateTemplate().find("from ReEvaluationEntity e where e.resumeId=?", resumeId);
+		if (list.size()==0) {
+			return null;
+		}
+		return (ReEvaluationEntity)list.get(0);
 	}
 
 	public Boolean updateEvaluation(ReEvaluationEntity entity) {
 		try {
-			getHibernateTemplate().update(entity);
+			getHibernateTemplate().saveOrUpdate(entity);
 		} catch (DataAccessException e) {
 			return false;
 		}

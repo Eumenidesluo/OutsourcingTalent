@@ -14,8 +14,8 @@ public class SelectDaoImpl extends HibernateDaoSupport implements SelectDao {
         super.setSessionFactory(sessionFactory);
     }
 	
-	public void addSelect(SelectUserRecruitEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addSelect(SelectUserRecruitEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
 	public void deleteSelect(SelectUserRecruitEntity entity) {
@@ -34,4 +34,11 @@ public class SelectDaoImpl extends HibernateDaoSupport implements SelectDao {
 		return getHibernateTemplate().find("from SelectUserRecruitEntity e where e.recruitId=?", recruitId);
 	}
 
+	public SelectUserRecruitEntity findSelectByUserIdAndRecruitId(int recruitId,int userId){
+		List<?> list = getHibernateTemplate().find("from SelectUserRecruitEntity e where e.recruitId=? and e.userId = ?", recruitId,userId);
+		if (list.size() == 0) {
+			return null;
+		}
+		return (SelectUserRecruitEntity)list.get(0);
+	}
 }

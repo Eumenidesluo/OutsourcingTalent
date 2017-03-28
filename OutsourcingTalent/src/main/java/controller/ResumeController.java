@@ -104,6 +104,7 @@ public class ResumeController {
 			result.put("status", StatusCode.JSON_PARSE_ERROR);
 			return JSON.toJSONString(result);
 		}
+		resumeEntity.setUserId(userId);
 		Integer resumeId = resumeDao.saveResume(resumeEntity);
 		if (resumeId < 1) {
 			result.put("status", StatusCode.SQL_OP_ERR);
@@ -147,7 +148,7 @@ public class ResumeController {
 		}//登录验证
     	
 		String partName = request.getParameter("partName");
-		String json = request.getParameter("partJson");
+		String json = request.getParameter("json");
 		String resumeId = request.getParameter("resumeId");
 		
 		if (partName == null||json == null || resumeId == null) {
@@ -262,7 +263,7 @@ public class ResumeController {
      * |名称              |类型         |是否必须   |默认值    |说明
      * Id			Integer		Y		null	查询的简历的Id
      * isResumeId	Integer		Y		null	判断是查询简历大项还是某个子项目
-     * partName		Integer		Y		null	查询的项目的名称
+     * partName		String		Y		null	查询的项目的名称
      * </pre>
      * <p>返回数据:JSON
      * <pre>
@@ -295,19 +296,11 @@ public class ResumeController {
 		}
 		if (isResumeId.equals("1")) {
 			List<?> list = resumeService.queryPartByResumeId(partName, Integer.parseInt(Id));
-			if (list == null) {
-				result.put("status", StatusCode.SQL_OP_ERR);
-				return JSON.toJSONString(result);
-			}
 			result.put("status", StatusCode.SUCCESS);
 			result.put("result", list);
 			return JSON.toJSONString(result);
 		}else if (isResumeId.equals("0")) {
 			Object object = resumeService.queryPartByMainId(partName, Integer.parseInt(Id));
-			if (object == null) {
-				result.put("status", StatusCode.SQL_OP_ERR);
-				return JSON.toJSONString(result);
-			}
 			result.put("status", StatusCode.SUCCESS);
 			result.put("result", object);
 			return JSON.toJSONString(result);

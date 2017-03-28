@@ -19,7 +19,6 @@ import component.ServiceException;
 import component.StatusCode;
 import dao.UserDao;
 import service.RegisterValidate;
-import serviceimpl.SpringContextHolder;
 
 /**
  * Created by Eumenides on 2017/2/18.
@@ -41,7 +40,7 @@ public class RegisterController {
      * |名称              |类型         |是否必须   |默认值    |说明
      * email   		String 		Y    	 NULL  用户名
      * password		String		Y		 NULL  密码
-     * action 		Integer		Y 		0		0：注册，1激活
+     * action 		String		Y 		null		register/activate
      * </pre>
      * <p>返回数据:JSON
      * <pre>
@@ -63,11 +62,12 @@ public class RegisterController {
         if("register".equals(action)) {
             String email = request.getParameter("email");
             if (userDao.isEmailUnique(email)==1){
-                RegisterValidate registerValidate=(RegisterValidate) SpringContextHolder.getBean("registerValidate");
+//                RegisterValidate registerValidate=(RegisterValidate) SpringContextHolder.getBean("registerValidate");
                 try {
-                    registerValidate.processregister(password,email);
+                    service.processregister(password,email);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                	result.put("status", StatusCode.SQL_OP_ERR);
+                	return JSON.toJSONString(result);
                 }
             }
             else{
@@ -89,7 +89,11 @@ public class RegisterController {
                 return JSON.toJSONString(result);
             }
 
-        }
+        }else {
+        	 result.put("status", StatusCode.PARAMETER_ERROR);
+             return JSON.toJSONString(result);
+		}
+        
         result.put("status", StatusCode.SUCCESS);
         return JSON.toJSONString(result);
     }

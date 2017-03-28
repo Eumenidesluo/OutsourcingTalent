@@ -8,4 +8,5 @@ public interface RecruitService {
 	
 	public List<RecruitBean> findRecruitsLimit(int begin,int max,String tag);
 	public List<?> findByKey(String key);
+	public RecruitBean findRecruitByRecruitId(int recruitId);
 }

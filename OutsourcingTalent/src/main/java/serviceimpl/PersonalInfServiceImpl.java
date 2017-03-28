@@ -72,9 +72,8 @@ public class PersonalInfServiceImpl implements PersonalInfService{
 	
 	}
 	@Override
-	public Boolean updatePersonInformation(String json) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean updatePersonInformation(PersonalInfEntity entity) {
+		return personalInfDao.update(entity);		
 	}
 	@Override
 	public PersonalInfEntity getPersonById(String id) {

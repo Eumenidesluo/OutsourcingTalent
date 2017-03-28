@@ -30,7 +30,7 @@ public class UserEntity {
 //    private SelectUserRecruitEntity selectUserRecruitById;
 
     public UserEntity() {
-    	registerTime = new Timestamp(0);
+//    	registerTime = new Timestamp(0);
     }
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

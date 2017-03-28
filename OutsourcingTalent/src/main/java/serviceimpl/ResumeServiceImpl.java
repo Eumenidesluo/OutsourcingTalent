@@ -112,12 +112,17 @@ public class ResumeServiceImpl implements ResumeService {
 			break;
 		case "schoolExp":
 			list = reSchoolExpDao.findExpsByResumeId(resumeId);
+			break;
 		case "science":
 			list = reScienceDao.findSciencesByResumeId(resumeId);
 			break;
 		case "evaluation":
-			list = reEducationDao.findEducationsByResumeId(resumeId);
-			break;
+			List<ReEvaluationEntity> list2 = new ArrayList<>();
+			ReEvaluationEntity reEvaluationEntity = reEvaluationDao.findEvaluation(resumeId);
+			if (reEvaluationEntity != null) {
+				list2.add(reEvaluationEntity);
+			}
+			return list2;			
 		default:
 			list = null;
 			break;
@@ -202,6 +207,7 @@ public class ResumeServiceImpl implements ResumeService {
 			if (internshipEntity == null) {
 				return false;
 			}
+			System.out.println(internshipEntity.getStartTime());
 			if (reInternshipDao.updateInternship(internshipEntity)) {
 				return true;
 			}

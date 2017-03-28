@@ -40,5 +40,18 @@ public class RecruitServiceImpl implements RecruitService{
 	public List<?> findByKey(String key) {
 		return coRecruitDao.findByKeyWord(key);
 	}
-
+	
+	@Override
+	public RecruitBean findRecruitByRecruitId(int recruitId){
+		CoRecruitEntity coRecruitEntity = coRecruitDao.findRecruitByRecruitId(recruitId);
+		if (coRecruitEntity == null) {
+			return null; 
+		}
+		CompanyEntity companyEntity = companyDao.findCompanyById(coRecruitEntity.getCompanyId());
+		if (companyEntity == null) {
+			return null;
+		}
+		RecruitBean recruitBean = new RecruitBean(coRecruitEntity,companyEntity.getName());
+		return recruitBean;
+	}
 }

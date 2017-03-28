@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
+import dao.CollectProjectDao;
+import entity.CollectUserProjectEntity;
 import entity.ProjectEntity;
 import service.ProjectService;
 
@@ -25,7 +28,178 @@ public class ProjectController {
 
 	@Autowired
 	ProjectService projectService;
+	@Autowired
+	CollectProjectDao collectProjectDao;
 	
+	/**
+     * <p>接口名称：collectStatus
+     * <p>主要描述：判断用户是否收藏指定项目
+     * <p>访问方式：post
+     * <p>URL: /project/collectStatus
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * projectId   	Integer 	Y    	 NULL  项目Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表（2000代表以收藏，4001代表为收藏）
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/collectStatus")
+	@ResponseBody
+	public String collectStatus(HttpSession session,@RequestParam Integer projectId) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登陆验证
+		if (projectId == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		
+		if (collectProjectDao.findCollectOne(userId, projectId)!=null) {
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}
+		result.put("status", StatusCode.NOT_EXIST);
+		return JSON.toJSONString(result);
+	}
+	/**
+     * <p>接口名称：queryCollects
+     * <p>主要描述：查询项目收藏
+     * <p>访问方式：post
+     * <p>URL: /project/queryCollects
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     collects
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/queryCollects")
+	@ResponseBody
+	public String queryCollects(HttpSession session) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登陆验证
+		
+		List<?> list = collectProjectDao.findCollectsByUserId(userId);
+		if (list == null) {
+			result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
+		List<ProjectEntity> collects = new ArrayList<>();
+		for(Object o:list) {
+			CollectUserProjectEntity entity = (CollectUserProjectEntity)o;
+			ProjectEntity projectEntity = projectService.queryProject(entity.getProjectId());
+			if (projectEntity != null) {
+				collects.add(projectEntity);
+			}
+		}
+		result.put("status", StatusCode.SUCCESS);
+		result.put("collects", collects);
+		return JSON.toJSONString(result);
+	}
+	/**
+     * <p>接口名称：removeCollect
+     * <p>主要描述：取消项目收藏收藏
+     * <p>访问方式：post
+     * <p>URL: /project/removeCollect
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * projectId   	Integer 	Y    	 NULL  项目Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/removeCollect")
+	@ResponseBody
+	public String removeCollect(HttpSession session,@RequestParam Integer projectId) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登陆验证
+		if (projectId == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		if (collectProjectDao.deleteCollect(userId, projectId)) {
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}
+		result.put("status", StatusCode.SQL_OP_ERR);
+		return JSON.toJSONString(result);
+	}
+	
+	/**
+     * <p>接口名称：collect
+     * <p>主要描述：添加项目收藏
+     * <p>访问方式：post
+     * <p>URL: /project/collect
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * groupId		Integer		Y		null	收藏团队的Id
+     * projectId	Integer		Y		null	被收藏的项目Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "collect")
+	@ResponseBody
+	public String collect(HttpSession session,@RequestParam Integer projectId){
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登陆验证
+		if (projectId == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		CollectUserProjectEntity entity = new CollectUserProjectEntity();
+		entity.setProjectId(projectId);
+		entity.setUserId(userId);
+		if (collectProjectDao.addCollect(entity)==-1) {
+			result.put("status", StatusCode.SQL_OP_ERR);
+			return JSON.toJSONString(result);
+		}
+		result.put("status", StatusCode.SUCCESS);
+		return JSON.toJSONString(result);
+	}
 	/**
      * <p>接口名称：search
      * <p>主要描述：查询记录(模糊查询)

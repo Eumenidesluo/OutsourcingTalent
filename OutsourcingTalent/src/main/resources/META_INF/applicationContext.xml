@@ -17,7 +17,7 @@
 
   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
     <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-    <property name="url" value="jdbc:mysql://localhost/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8"/>
+    <property name="url" value="jdbc:mysql://112.74.51.32/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8"/>
     <property name="username" value="root"/>
     <property name="password" value="chenqi11545"/>
   </bean>
@@ -31,7 +31,7 @@
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">true</prop>
         <prop key="hibernate.format_sql">true</prop>
-        <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8</prop>
+        <prop key="hibernate.connection.url">jdbc:mysql://112.74.51.32:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8</prop>
         <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
       </props>
     </property>
@@ -55,6 +55,7 @@
         <value>entity.ProjectStatusEntity</value>
         <value>entity.NoticeEntity</value>
         <value>entity.RelateUserGroupEntity</value>
+        <value>entity.CollectUserProjectEntity</value>
       </list>
     </property>
   </bean>
@@ -147,11 +148,18 @@
     <property name="target" ref="coRecruitDaoTarget"/>
   </bean>
   
-  <bean id="collectDaoTarget" class="daoimpl.CollectDaoImpl">
+  <bean id="collectRecruitDaoTarget" class="daoimpl.CollectRecruitDaoImpl">
     <property name="superSessionFactory" ref="sessionFactory"/>
   </bean>
-  <bean id="collectDao" parent="transactionBase">
-    <property name="target" ref="collectDaoTarget"/>
+  <bean id="collectRecruitDao" parent="transactionBase">
+    <property name="target" ref="collectRecruitDaoTarget"/>
+  </bean>
+  
+  <bean id="collectProjectDaoTarget" class="daoimpl.CollectProjectDaoImpl">
+    <property name="superSessionFactory" ref="sessionFactory"/>
+  </bean>
+  <bean id="collectProjectDao" parent="transactionBase">
+    <property name="target" ref="collectProjectDaoTarget"/>
   </bean>
   
   <bean id="selectDaoTarget" class="daoimpl.SelectDaoImpl">

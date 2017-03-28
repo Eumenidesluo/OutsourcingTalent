@@ -28,11 +28,16 @@ public class ReInternshipDaoImpl extends HibernateDaoSupport implements ReIntern
 	}
 
 	public List<?> findInternshipsByResumeId(int resumeId) {
-		return getHibernateTemplate().find("from ReInternshipEntity e where e.resumeId=?", resumeId);
+		List<?> list = getHibernateTemplate().find("from ReInternshipEntity e where e.resumeId=?", resumeId);
+		return list;
 	}
 
 	public ReInternshipEntity findInternshipByinternshioId(int internshipId) {
-		return (ReInternshipEntity)getHibernateTemplate().find("from ReInternshipEntity e where e.internshipId=?", internshipId).get(0);
+		List<?> list = getHibernateTemplate().find("from ReInternshipEntity e where e.internshipId=?", internshipId);
+		if (list.size()==0) {
+			return null;
+		}
+		return (ReInternshipEntity)list.get(0);
 	}
 
 	public void deleteInternshipByInternshipId(int internshipId) {

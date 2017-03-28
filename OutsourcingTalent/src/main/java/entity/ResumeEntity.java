@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +22,7 @@ public class ResumeEntity {
     private String phone;
     private String email;
     private String city;
-    private String label;
+    private Date time;
 //    private ReEvaluationEntity reEvaluationByResumeId;
     
     public ResumeEntity() {
@@ -28,8 +30,8 @@ public class ResumeEntity {
     	name = "";
     	email = "";
     	city = "";
-    	label = "";
-    }
+    	time = new Date(System.currentTimeMillis())
+;    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -56,6 +58,16 @@ public class ResumeEntity {
     @Column(name="userId")
     public int getUserId() {
 		return userId;
+	}
+	
+	@Basic
+    @Column(name="time")
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
 	}
 
 	public void setUserId(int userId) {
@@ -92,26 +104,16 @@ public class ResumeEntity {
         this.city = city;
     }
 
-    @Basic
-    @Column(name = "label")
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((label == null) ? 0 : label.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
 		result = prime * result + resumeId;
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
 		result = prime * result + userId;
 		return result;
 	}
@@ -135,11 +137,6 @@ public class ResumeEntity {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (label == null) {
-			if (other.label != null)
-				return false;
-		} else if (!label.equals(other.label))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -152,10 +149,14 @@ public class ResumeEntity {
 			return false;
 		if (resumeId != other.resumeId)
 			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
 		if (userId != other.userId)
 			return false;
 		return true;
 	}
-
 	
 }

@@ -7,7 +7,7 @@ import entity.PersonalInfEntity;
  */
 
 public interface PersonalInfDao {
-	public void update(PersonalInfEntity entity);
+	public Boolean update(PersonalInfEntity entity);
 	public PersonalInfEntity findByEmail(String email);
 
 }

@@ -160,13 +160,23 @@
                 <configuration>  
                     <!-- 注意此处的url -->  
                     <!--  <url>http://localhost:18080/manager/text</url> --><!--部署到本地tomcat7-->  
-                    <url>http://172.18.185.181:8080/manager/text</url>  
-                    <server>tomcat7</server> <!-- 此处的名字必须和setting.xml中配置的ID一致 -->  
+                    <url>http://112.74.51.32:8080/manager/text</url>  
                     <path>/OutsourcingTalent</path>  <!-- 此处的名字是项目发布的工程名 -->  
            			<username>admin</username>
            			<password>admin</password>
                 </configuration>  
             </plugin> 
+             <!-- <plugin>  
+                <groupId>org.codehaus.mojo</groupId>  
+                <artifactId>tomcat-maven-plugin</artifactId>  
+                <version>1.0-beta-1</version>  
+                <configuration>  
+                    <url>http://112.74.51.32:8080/manager</url>  
+                    <username>admin</username>
+                    <password>admin</password>
+                    <ignorePackaging>true</ignorePackaging>  
+                </configuration>  
+            </plugin> -->
             </plugins> 
     </pluginManagement>
   </build>

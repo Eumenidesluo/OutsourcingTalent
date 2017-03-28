@@ -1,10 +1,10 @@
 eclipse.preferences.version=1
 encoding//src/main/java/component/MD5Util.java=UTF-8
 encoding//src/main/java/controller=GBK
-encoding//src/main/java/controller/CompanyRecruitController.java=GBK
 encoding//src/main/java/controller/GroupController.java=GBK
 encoding//src/main/java/controller/LoginController.java=GBK
 encoding//src/main/java/controller/ProjectStatusController.java=GBK
+encoding//src/main/java/controller/RecruitController.java=GBK
 encoding//src/main/java/controller/RegisterController.java=UTF-8
 encoding//src/main/java/controller/ResumeController.java=GBK
 encoding//src/main/java/service/RegisterValidate.java=UTF-8

@@ -1,6 +1,6 @@
 package entity;
 
-import java.sql.Timestamp;
+import java.sql.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,7 +17,7 @@ public class NoticeEntity {
     private int noticeId;
     private int userId;
     private String notice;
-    private Timestamp time;
+    private Date time;
 
     @Id
     @Column(name = "noticeId")
@@ -51,11 +51,11 @@ public class NoticeEntity {
 
     @Basic
     @Column(name = "time")
-    public Timestamp getTime() {
+    public Date getTime() {
         return time;
     }
 
-    public void setTime(Timestamp time) {
+    public void setTime(Date time) {
         this.time = time;
     }
 

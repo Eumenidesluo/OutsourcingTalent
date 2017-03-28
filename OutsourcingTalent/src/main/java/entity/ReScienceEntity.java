@@ -1,5 +1,7 @@
 package entity;
 
+import java.sql.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +20,8 @@ public class ReScienceEntity {
     private int resumeId;
     private String project;
     private String position;
-    private String start;
-    private String end;
+    private Date start;
+    private Date end;
     private String city;
     private String description;
 
@@ -64,25 +66,6 @@ public class ReScienceEntity {
         this.position = position;
     }
 
-    @Basic
-    @Column(name = "start")
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    @Basic
-    @Column(name = "end")
-    public String getEnd() {
-        return end;
-    }
-
-    public void setEnd(String end) {
-        this.end = end;
-    }
 
     @Basic
     @Column(name = "city")
@@ -103,6 +86,26 @@ public class ReScienceEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Basic
+    @Column(name = "start")
+	public Date getStart() {
+		return start;
+	}
+
+	public void setStart(Date start) {
+		this.start = start;
+	}
+
+	@Basic
+    @Column(name = "end")
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
+	}
 
 	@Override
 	public int hashCode() {
@@ -164,5 +167,7 @@ public class ReScienceEntity {
 			return false;
 		return true;
 	}
+
+    
 
 }

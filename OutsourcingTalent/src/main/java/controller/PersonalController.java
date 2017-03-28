@@ -55,7 +55,12 @@ public class PersonalController {
 			return JSON.toJSONString(result);
 		}
     	String personJson = request.getParameter("personJson");
-    	if (personService.updatePersonInformation(personJson)) {
+    	if (personJson == null) {
+    		result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+    	PersonalInfEntity entity = JSON.parseObject(personJson,PersonalInfEntity.class);
+    	if (personService.updatePersonInformation(entity)) {
     		result.put("status", StatusCode.SUCCESS);
 			return JSON.toJSONString(result);
 		}else{

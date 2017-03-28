@@ -3,6 +3,8 @@ package entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,11 +12,24 @@ import javax.persistence.Table;
  * Created by Eumenides on 2017/2/22.
  */
 @Entity
-@Table(name = "COLLET_USER_RECRUIT", schema = "outsourcingtalent", catalog = "")
+@Table(name = "COLLECT_USER_RECRUIT", schema = "outsourcingtalent", catalog = "")
 public class CollectUserRecruitEntity {
+	private int collectId;
     private int userId;
     private int recruitId;
+    
     @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name = "collectId")
+    public int getCollectId() {
+		return collectId;
+	}
+
+	public void setCollectId(int collectId) {
+		this.collectId = collectId;
+	}
+
+	@Basic
     @Column(name = "userId")
     public int getUserId() {
         return userId;
@@ -24,6 +39,7 @@ public class CollectUserRecruitEntity {
         this.userId = userId;
     }
 
+    
     @Basic
     @Column(name = "recruitId")
 	public int getRecruitId() {
@@ -38,6 +54,7 @@ public class CollectUserRecruitEntity {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + collectId;
 		result = prime * result + recruitId;
 		result = prime * result + userId;
 		return result;
@@ -52,12 +69,13 @@ public class CollectUserRecruitEntity {
 		if (getClass() != obj.getClass())
 			return false;
 		CollectUserRecruitEntity other = (CollectUserRecruitEntity) obj;
+		if (collectId != other.collectId)
+			return false;
 		if (recruitId != other.recruitId)
 			return false;
 		if (userId != other.userId)
 			return false;
 		return true;
 	}
-    
 
 }
