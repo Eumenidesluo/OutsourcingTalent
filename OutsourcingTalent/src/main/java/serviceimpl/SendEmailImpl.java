@@ -1,12 +1,20 @@
 package serviceimpl;
 
-import service.SendEmail;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+
+import service.SendEmail;
 
 /**
  * Created by Eumenides on 2017/2/18.
@@ -58,6 +66,7 @@ public class SendEmailImpl implements SendEmail{
             InternetAddress[] address = {new InternetAddress(toEmail)};
             msg.setRecipients(Message.RecipientType.TO, address);
             msg.setSubject("账号激活邮件");
+            msg.setSubject(MimeUtility.encodeText("万才网激活邮件", "utf-8", null));
             msg.setSentDate(new Date());
             msg.setContent(content , "text/html;charset=utf-8");
 
@@ -68,7 +77,11 @@ public class SendEmailImpl implements SendEmail{
         catch (MessagingException mex) {
             mex.printStackTrace();
             return false;
-        }
+        } catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
     }
 
 }

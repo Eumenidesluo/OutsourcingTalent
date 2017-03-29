@@ -1,12 +1,10 @@
 package service;
 
-import component.ServiceException;
-
 public interface ProjectStatusService {
 
 	public Boolean apply(Integer projectId,Integer groupId);
-	
-	public String appoint(Integer projectId,Integer appointor) throws ServiceException;
+	public Integer status(Integer projectId,Integer groupId);
+	public Boolean appoint(Integer projectId,Integer appointor);
 	
 	public Boolean finish(Integer projectId,Integer groupId);
 }

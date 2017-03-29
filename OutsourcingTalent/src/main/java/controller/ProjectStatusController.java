@@ -9,11 +9,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
+import entity.GroupEntity;
+import service.GroupService;
 import service.ProjectStatusService;
 
 @Controller
@@ -22,7 +25,60 @@ public class ProjectStatusController {
 
 	@Autowired
 	ProjectStatusService projectStatusService;
+	@Autowired
+	GroupService groupService;
 	
+	/**
+     * <p>接口名称：init
+     * <p>主要描述：初始化项目访问界面
+     * <p>访问方式：post
+     * <p>URL: /bid/init
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * projectId	Integer			Y		null	项目Id
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表  4001未申请，2000 申请中  2001 被委任
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/init")
+	@ResponseBody
+	public String init(HttpSession session,@RequestParam Integer projectId) {
+		Map<String, Object> result = new HashMap<>();
+    	Integer userId = (Integer) session.getAttribute("userId");
+    	if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}//登录验证
+    	if (projectId == null) {
+    		result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+    	GroupEntity entity = groupService.findGroupByLeaderId(userId);
+    	if (entity == null) {
+    		result.put("status", StatusCode.NOT_EXIST);
+			return JSON.toJSONString(result);
+		}
+    	Integer bidStatus = projectStatusService.status(projectId, entity.getGroupId());
+    	if (bidStatus == -1) {
+    		result.put("status", StatusCode.NOT_EXIST);
+			return JSON.toJSONString(result);
+		}else if (bidStatus == 0) {
+			result.put("status", StatusCode.SUCCESS);
+			return JSON.toJSONString(result);
+		}else if (bidStatus == 1) {
+			result.put("status", StatusCode.APPOINT);
+			return JSON.toJSONString(result);
+		}
+    	result.put("status", StatusCode.UNKNOW_ERROR);
+    	return JSON.toJSONString(result);
+	}
 	/**
      * <p>接口名称：apply
      * <p>主要描述：申请指定项目
@@ -71,7 +127,7 @@ public class ProjectStatusController {
 	
 	/**
      * <p>接口名称：appoint
-     * <p>主要描述：根据Id查找群组
+     * <p>主要描述：委任project
      * <p>访问方式：post
      * <p>URL: /bid/appoint
      * <p>参数说明:
@@ -107,8 +163,7 @@ public class ProjectStatusController {
 		}//参数验证
 		
 		try {
-			String operation = projectStatusService.appoint(Integer.parseInt(projectId), Integer.parseInt(projectId));
-			if (operation.equals("success")) {
+			if (projectStatusService.appoint(Integer.parseInt(projectId), Integer.parseInt(projectId))) {
 				result.put("status", StatusCode.SUCCESS);
 				return JSON.toJSONString(result);
 			}

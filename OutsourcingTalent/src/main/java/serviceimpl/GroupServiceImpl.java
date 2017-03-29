@@ -5,11 +5,16 @@ import java.util.List;
 
 import dao.GroupDao;
 import dao.PersonalInfDao;
+import dao.ProjectDao;
+import dao.RelateGPDao;
 import dao.UGRelateDao;
 import dao.UserDao;
 import entity.GroupEntity;
 import entity.MemberBean;
 import entity.PersonalInfEntity;
+import entity.ProjectEntity;
+import entity.RelateGroupProjectBean;
+import entity.RelateGroupProjectEntity;
 import entity.RelateUserGroupBean;
 import entity.RelateUserGroupEntity;
 import entity.UserEntity;
@@ -21,8 +26,27 @@ public class GroupServiceImpl implements GroupService{
 	UserDao userDao;
 	UGRelateDao ugRelateDao;
 	PersonalInfDao personalInfDao;
+	RelateGPDao relateGPDao;
+	ProjectDao projectDao;
 	
 	
+	
+	public ProjectDao getProjectDao() {
+		return projectDao;
+	}
+
+	public void setProjectDao(ProjectDao projectDao) {
+		this.projectDao = projectDao;
+	}
+
+	public RelateGPDao getRelateGPDao() {
+		return relateGPDao;
+	}
+
+	public void setRelateGPDao(RelateGPDao relateGPDao) {
+		this.relateGPDao = relateGPDao;
+	}
+
 	public PersonalInfDao getPersonalInfDao() {
 		return personalInfDao;
 	}
@@ -126,6 +150,23 @@ public class GroupServiceImpl implements GroupService{
 			list.add(new RelateUserGroupBean(entity,groupEntity.getName()));
 		}
 		return list;
+	}
+
+	@Override
+	public List<RelateGroupProjectBean> findRelatesByGroupId(Integer groupId) {
+		List<RelateGroupProjectBean> beanList = new ArrayList<>();
+		List<?> entityList = relateGPDao.findRelatesByGroupId(groupId);
+		for(Object o:entityList) {
+			RelateGroupProjectEntity entity = (RelateGroupProjectEntity)o;
+			ProjectEntity projectEntity = projectDao.findProjectByProjectId(entity.getProjectId());
+			beanList.add(new RelateGroupProjectBean(entity.getProjectId(),entity.getIsEntrusted(),projectEntity.getTitle()));
+		}
+		return beanList;
+	}
+
+	@Override
+	public GroupEntity findGroupByLeaderId(Integer leader) {
+		return groupDao.findGroupByLeaderId(leader);
 	}
 	
 }

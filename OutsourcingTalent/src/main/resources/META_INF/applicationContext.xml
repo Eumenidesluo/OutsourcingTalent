@@ -17,8 +17,8 @@
 
   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
     <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-    <property name="url" value="jdbc:mysql://112.74.51.32/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8"/>
-    <property name="username" value="root"/>
+    <property name="url" value="jdbc:mysql://127.0.0.1:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8"/>
+    <property name="username" value="system"/>
     <property name="password" value="chenqi11545"/>
   </bean>
 
@@ -31,7 +31,7 @@
         <prop key="hibernate.hbm2ddl.auto">update</prop>
         <prop key="hibernate.show_sql">true</prop>
         <prop key="hibernate.format_sql">true</prop>
-        <prop key="hibernate.connection.url">jdbc:mysql://112.74.51.32:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8</prop>
+        <prop key="hibernate.connection.url">jdbc:mysql://127.0.0.1:3306/OutsourcingTalent?useUnicode=true&amp;characterEncoding=UTF-8</prop>
         <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
       </props>
     </property>
@@ -224,6 +224,8 @@
   	<property name="userDao" ref="userDaoTarget"></property>
   	<property name="ugRelateDao" ref="uGRelateDaoTarget"></property>
   	<property name="personalInfDao" ref="personalInfDaoTarget"></property>
+  	<property name="relateGPDao" ref="relateGPDaoTarget"></property>
+  	<property name="projectDao" ref="projectDaoTarget"></property>
   </bean>
   <bean id="groupService" parent="transactionBase">
     <property name="target" ref="groupServiceTarget"/>

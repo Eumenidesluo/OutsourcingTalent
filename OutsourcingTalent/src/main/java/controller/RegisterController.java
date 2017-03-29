@@ -82,6 +82,7 @@ public class RegisterController {
 
             try {
                 service.processActivate(email,validateCode);
+                return "激活成功";
             } catch (ServiceException e) {
                 request.setAttribute("message" , e.getMessage());
             }catch (ParseException e){

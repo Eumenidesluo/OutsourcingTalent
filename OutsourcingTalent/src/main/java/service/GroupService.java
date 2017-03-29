@@ -2,7 +2,9 @@ package service;
 
 import java.util.List;
 
+import entity.GroupEntity;
 import entity.MemberBean;
+import entity.RelateGroupProjectBean;
 import entity.RelateUserGroupBean;
 
 public interface GroupService {
@@ -16,5 +18,9 @@ public interface GroupService {
 	public Boolean deleteMenber(Integer groupId,Integer deleteId);
 	
 	public List<RelateUserGroupBean> getUserGroupInfo(Integer userId);
+	
+	public List<RelateGroupProjectBean> findRelatesByGroupId(Integer groupId);
+	
+	public GroupEntity findGroupByLeaderId(Integer leader);
 	
 }

@@ -3,6 +3,7 @@ package component;
 public class StatusCode {
 
 	public final static Integer SUCCESS = 2000;
+	public final static Integer APPOINT = 2001;
 	public final static Integer NOT_EXIST = 4001;
 	public final static Integer PARAMETER_ERROR = 4002;
 	public final static String PASSWORD_OR_EMAIL_WRONG = "4003";

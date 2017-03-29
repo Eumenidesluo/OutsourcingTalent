@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSON;
 
 import component.StatusCode;
 import entity.MemberBean;
+import entity.RelateGroupProjectBean;
 import entity.RelateUserGroupBean;
 import service.GroupService;
 
@@ -27,6 +28,44 @@ public class GroupController {
 	@Autowired
 	GroupService groupService;
 	
+	/**
+     * <p>接口名称：relate
+     * <p>主要描述：查看与group有关联的project
+     * <p>访问方式：post
+     * <p>URL: /group/relate
+     * <p>参数说明:
+     * <pre>
+     * |名称              |类型         |是否必须   |默认值    |说明
+     * groupId		Integer		Y 		null	groupId
+     * </pre>
+     * <p>返回数据:JSON
+     * <pre>
+     * {
+     *     status: ${StatusCode}, 参见状态码表
+     *     relates:list<RelateGroupProjectBean>其中hasisEntrusted为0是申请中的项目，为1 是被委任的项目
+     * }
+     * </pre>
+     * <p>修改者:陈琦
+     * 
+     */
+	@RequestMapping(value = "/relate")
+	@ResponseBody
+	public String applying(HttpSession session,@RequestParam Integer groupId) {
+		Map< String, Object> result = new HashMap<>();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userId == null) {
+			result.put("status", StatusCode.AUTHENTICATION_FAILED);
+			return JSON.toJSONString(result);
+		}
+		if (groupId == null) {
+			result.put("status", StatusCode.PARAMETER_ERROR);
+			return JSON.toJSONString(result);
+		}
+		List<RelateGroupProjectBean> beanList = groupService.findRelatesByGroupId(groupId);
+		result.put("status", StatusCode.SUCCESS);
+		result.put("relates", beanList);
+		return JSON.toJSONString(result);
+	}
 	/**
      * <p>接口名称：init
      * <p>主要描述：获取个人的群组信息

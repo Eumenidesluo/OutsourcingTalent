@@ -33,6 +33,14 @@ public class GroupDaoImpl extends HibernateDaoSupport implements GroupDao {
 		}
 		return (GroupEntity)list.get(0);
 	}
+
+	public GroupEntity findGroupByLeaderId(Integer leaderId) {
+		List<?> list = getHibernateTemplate().find("from GroupEntity e where e.leaderId = ?", leaderId);
+		if (list.size()==0) {
+			return null;
+		}
+		return (GroupEntity)list.get(0);
+	}
 	
 	
 

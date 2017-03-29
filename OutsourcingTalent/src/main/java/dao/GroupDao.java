@@ -8,4 +8,5 @@ public interface GroupDao {
 	public void deleteGroup(GroupEntity entity);
 	public void updateGroup(GroupEntity entity);
 	public GroupEntity findGroup(int groupId);
+	public GroupEntity findGroupByLeaderId(Integer leaderId);
 }

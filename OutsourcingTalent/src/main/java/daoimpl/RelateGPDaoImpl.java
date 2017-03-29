@@ -2,6 +2,8 @@ package daoimpl;
 
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 
@@ -14,8 +16,8 @@ public class RelateGPDaoImpl extends HibernateDaoSupport implements RelateGPDao 
         super.setSessionFactory(sessionFactory);
     }
 	
-	public void addRelate(RelateGroupProjectEntity entity) {
-		getHibernateTemplate().save(entity);
+	public Integer addRelate(RelateGroupProjectEntity entity) {
+		return (Integer)getHibernateTemplate().save(entity);
 	}
 
 	public void deleteRelate(RelateGroupProjectEntity entity) {
@@ -44,6 +46,24 @@ public class RelateGPDaoImpl extends HibernateDaoSupport implements RelateGPDao 
 			return null;
 		}
 		return list;
+	}
+
+	@Override
+	public RelateGroupProjectEntity findRelateByProjectIdAndGroupId(Integer projectId, Integer groupId) {
+		Session session = getSessionFactory().getCurrentSession();
+		try {		
+			Query query = session.createQuery("from RelateGroupProjectEntity e where e.projectId = ? and e.groupId = ?");
+			query.setInteger(0, projectId);
+			query.setInteger(1, groupId);
+			List<?> list = query.list();
+			if (list.size() == 0) {
+				return null;
+			}
+			return (RelateGroupProjectEntity)list.get(0);
+		} catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

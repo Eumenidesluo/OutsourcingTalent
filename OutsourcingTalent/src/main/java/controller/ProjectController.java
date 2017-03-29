@@ -165,7 +165,6 @@ public class ProjectController {
      * <p>参数说明:
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
-     * groupId		Integer		Y		null	收藏团队的Id
      * projectId	Integer		Y		null	被收藏的项目Id
      * </pre>
      * <p>返回数据:JSON
