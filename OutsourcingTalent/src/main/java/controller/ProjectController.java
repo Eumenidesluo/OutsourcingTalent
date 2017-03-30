@@ -102,7 +102,9 @@ public class ProjectController {
 		
 		List<?> list = collectProjectDao.findCollectsByUserId(userId);
 		if (list == null) {
-			result.put("status", StatusCode.SQL_OP_ERR);
+			list = new ArrayList<>();
+			result.put("status", StatusCode.SUCCESS);
+			result.put("collects", list);
 			return JSON.toJSONString(result);
 		}
 		List<ProjectEntity> collects = new ArrayList<>();
@@ -235,8 +237,7 @@ public class ProjectController {
 		}
 		List<?> list = projectService.findProjectByKey(text);
 		if (list == null) {
-			result.put("status", StatusCode.SQL_OP_ERR);
-			return JSON.toJSONString(result);
+			list = new ArrayList<>();
 		}
 		result.put("status", StatusCode.SUCCESS);
 		result.put("list", list);
@@ -325,8 +326,7 @@ public class ProjectController {
     	
     	List<?> projectList = projectService.queryManyProjects(Integer.parseInt(begin), 10);
     	if (projectList == null) {
-    		result.put("status", StatusCode.SQL_OP_ERR);
-			return JSON.toJSONString(result);
+			projectList = new ArrayList<>();
 		}
     	result.put("status", StatusCode.SUCCESS);
     	result.put("projects", projectList);

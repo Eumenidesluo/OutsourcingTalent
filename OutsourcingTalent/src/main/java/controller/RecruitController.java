@@ -101,11 +101,12 @@ public class RecruitController {
 		}//µÇÂ½ÑéÖ¤
 		
 		List<?> list = collectRecruitDao.findCollectsByUserId(userId);
+		List<RecruitBean> collects = new ArrayList<>();
 		if (list == null) {
-			result.put("status", StatusCode.SQL_OP_ERR);
+			result.put("status", StatusCode.SUCCESS);
+			result.put("collects", collects);
 			return JSON.toJSONString(result);
 		}
-		List<RecruitBean> collects = new ArrayList<>();
 		for(Object o:list) {
 			CollectUserRecruitEntity entity = (CollectUserRecruitEntity)o;
 			RecruitBean recruitEntity = recruitService.findRecruitByRecruitId(entity.getRecruitId());
@@ -233,11 +234,7 @@ public class RecruitController {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		List<?> list = recruitService.findByKey(text);
-		if (list == null) {
-			result.put("status", StatusCode.SQL_OP_ERR);
-			return JSON.toJSONString(result);
-		}
+		List<RecruitBean> list = recruitService.findByKey(text);
 		result.put("status", StatusCode.SUCCESS);
 		result.put("list", list);
 		return JSON.toJSONString(result);

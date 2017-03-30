@@ -53,8 +53,6 @@ public class ProjectDaoImpl extends HibernateDaoSupport implements ProjectDao {
 		Session session = getSessionFactory().getCurrentSession();
 		try {		
 			Query query = session.createQuery("from ProjectEntity");
-			query.setFirstResult(begin);
-			query.setMaxResults(max);
 			List<?> list = query.list();
 			return list;
 		} catch(Exception e){

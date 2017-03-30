@@ -131,9 +131,6 @@ public class LoginController {
 		}
     	List<NoticeEntity> notice = noticeDao.queryByUserId(userId,2);
     	result.put("status", StatusCode.SUCCESS);
-    	RecruitBean coRecruitEntity = (RecruitBean)recruitEntitys.get(0);
-    	
-    	System.out.println(coRecruitEntity.getTitle());
     	result.put("recruits", recruitEntitys);
     	result.put("personal", personalInfEntity);
     	result.put("notices", notice);
