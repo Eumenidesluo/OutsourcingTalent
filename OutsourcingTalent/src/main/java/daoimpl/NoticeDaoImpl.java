@@ -16,15 +16,15 @@ public class NoticeDaoImpl extends HibernateDaoSupport implements NoticeDao{
         super.setSessionFactory(sessionFactory);
     }
 	@Override
-	public List<?> queryByUserId(String userId) {
-		List<?> list = getHibernateTemplate().find("from NoticeEntity e where e.userId=?", Integer.parseInt(userId));
+	public List<?> queryByUserId(Integer userId) {
+		List<?> list = getHibernateTemplate().find("from NoticeEntity e where e.userId=?", userId);
 		if (list.size() == 0) {
 			return null;
 		}
 		return list;
 	}
 	@Override
-	public List<NoticeEntity> queryByUserId(String userId, int number) {
+	public List<NoticeEntity> queryByUserId(Integer userId, int number) {
 		List<?> list = queryByUserId(userId);
 		if (list == null) {
 			return null;

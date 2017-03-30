@@ -6,7 +6,7 @@ import entity.NoticeEntity;
 
 public interface NoticeDao {
 
-	public List<?> queryByUserId(String userId);
-	public List<NoticeEntity> queryByUserId(String userId,int number);
+	public List<?> queryByUserId(Integer userId);
+	public List<NoticeEntity> queryByUserId(Integer userId,int number);
 	public Boolean saveNotice(NoticeEntity entity);
 }

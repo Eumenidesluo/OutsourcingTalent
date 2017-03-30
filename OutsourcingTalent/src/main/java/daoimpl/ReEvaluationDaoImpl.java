@@ -41,7 +41,7 @@ public class ReEvaluationDaoImpl extends HibernateDaoSupport implements ReEvalua
 
 	public Boolean updateEvaluation(ReEvaluationEntity entity) {
 		try {
-			getHibernateTemplate().saveOrUpdate(entity);
+			getHibernateTemplate().update(entity);
 		} catch (DataAccessException e) {
 			return false;
 		}

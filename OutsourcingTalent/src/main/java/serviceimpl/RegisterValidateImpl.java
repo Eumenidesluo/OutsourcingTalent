@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import component.MD5Util;
 import component.ServiceException;
+import dao.NoticeDao;
 import dao.UserDao;
+import entity.NoticeEntity;
 import entity.UserEntity;
 import service.RegisterValidate;
 
@@ -19,7 +21,8 @@ import service.RegisterValidate;
 public class RegisterValidateImpl implements RegisterValidate{
     @Autowired
     private UserDao userDao;
-
+    @Autowired
+    NoticeDao noticeDao;
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -83,6 +86,10 @@ public class RegisterValidateImpl implements RegisterValidate{
                         user.setStatus(1);//把状态改为激活
                         System.out.println("==sh==="+user.getStatus());
                         userDao.update(user);
+                        NoticeEntity noticeEntity = new NoticeEntity();
+                        noticeEntity.setNotice("激活成功");
+                        noticeEntity.setUserId(user.getId());
+                        noticeDao.saveNotice(noticeEntity);
                     } else {
                         throw new ServiceException("激活码不正确");
                     }

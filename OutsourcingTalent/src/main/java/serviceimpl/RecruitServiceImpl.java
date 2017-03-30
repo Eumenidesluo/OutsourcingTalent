@@ -21,8 +21,8 @@ public class RecruitServiceImpl implements RecruitService{
 	@Autowired
 	CompanyDao companyDao;
 	@Override
-	public List<RecruitBean> findRecruitsLimit(int begin, int max, String tag) {
-		List<?> entityList = coRecruitDao.findRecruitsLimit(begin, max, tag);
+	public List<RecruitBean> findRecruitsLimit(int begin, int max,String tag) {
+		List<?> entityList = coRecruitDao.findRecruitsLimit(begin, max,tag);
 		if (entityList == null) {
 			return null;
 		}

@@ -13,7 +13,7 @@ public interface GroupService {
 	
 	public List<MemberBean> queryMembers(Integer groupId);
 	
-	public Boolean inviteMember(Integer groupId,Integer inviteId);
+	public Boolean inviteMember(Integer groupId,String email);
 	
 	public Boolean deleteMenber(Integer groupId,Integer deleteId);
 	

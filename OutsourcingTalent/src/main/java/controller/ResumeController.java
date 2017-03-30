@@ -326,7 +326,7 @@ public class ResumeController {
      *     status: ${StatusCode}, 参见状态码表
      * }
      * </pre>
-     * <p>修改者:陈琦
+     * <p>修改者:陈琦</p>
      * 
      */
 	@RequestMapping(value="/deleteResume")
@@ -364,7 +364,7 @@ public class ResumeController {
      * partName		String		Y		null	更新项目的名字
      * Id			Integer		Y		Null	该部分的Id
      * 
-     * <p>返回数据:JSON
+     * <p>返回数据:JSON</p>
      * <pre>
      * {
      *     status: ${StatusCode}, 参见状态码表
@@ -409,7 +409,7 @@ public class ResumeController {
      * partName		String		Y		null	更新项目的名字
      * json			String		Y		Null	更新后的内容
      * 
-     * <p>返回数据:JSON
+     * <p>返回数据:JSON</p>
      * <pre>
      * {
      *     status: ${StatusCode}, 参见状态码表

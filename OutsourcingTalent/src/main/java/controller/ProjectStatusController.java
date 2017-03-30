@@ -88,7 +88,6 @@ public class ProjectStatusController {
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
      * projectId	Integer			Y		null	被申请的项目Id
-     * groupId   	Integer 		Y    	 NULL  申请的团队Id
      * </pre>
      * <p>返回数据:JSON
      * <pre>
@@ -110,14 +109,18 @@ public class ProjectStatusController {
 		}//登录验证
     	
 		String projectId = request.getParameter("projectId");
-		String groupId = request.getParameter("groupId");
 		
-		if (projectId == null || groupId == null) {
+		if (projectId == null) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
 		
-		if (projectStatusService.apply(Integer.parseInt(projectId), Integer.parseInt(groupId))) {
+		GroupEntity entity  = groupService.findGroupByLeaderId(userId);
+		if (entity == null) {
+			result.put("status", StatusCode.NOT_EXIST);
+			return JSON.toJSONString(result);
+		}
+		if (projectStatusService.apply(Integer.parseInt(projectId), entity.getGroupId())) {
 			result.put("status", StatusCode.SUCCESS);
 			return JSON.toJSONString(result);
 		}

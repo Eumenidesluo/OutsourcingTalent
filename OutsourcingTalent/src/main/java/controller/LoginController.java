@@ -73,8 +73,12 @@ public class LoginController {
         UserDao userDao = (UserDao) SpringContextHolder.getBean("userDao");
         
         UserEntity userEntity = userDao.findByEmail(email);
-        if (userEntity == null||userEntity.getStatus()==0)
+        
+        if (userEntity == null)
             result.put("status", StatusCode.NOT_EXIST);
+        else if (userEntity.getStatus() == 0) {
+			result.put("status", StatusCode.NOT_ACTIOVE);
+		}
         else {
             if (userEntity.getPassword().equals(password)) {
             	session.setAttribute("userId", userEntity.getId());
@@ -119,18 +123,13 @@ public class LoginController {
 			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}
-    	String tag = request.getParameter("tag");
-    	if (tag == null) {
-			result.put("status", StatusCode.PARAMETER_ERROR);
-			return JSON.toJSONString(result);
-		}
     	PersonalInfEntity personalInfEntity = personalInfService.getPersonById(userId.toString());
-    	List<RecruitBean> recruitEntitys = recruitService.findRecruitsLimit(0, 5,tag);
+    	List<RecruitBean> recruitEntitys = recruitService.findRecruitsLimit(0, 5,null);
     	if (recruitEntitys == null) {
     		result.put("status", StatusCode.SQL_OP_ERR);
 			return JSON.toJSONString(result);
 		}
-    	List<NoticeEntity> notice = noticeDao.queryByUserId(userId.toString(),2);
+    	List<NoticeEntity> notice = noticeDao.queryByUserId(userId,2);
     	result.put("status", StatusCode.SUCCESS);
     	RecruitBean coRecruitEntity = (RecruitBean)recruitEntitys.get(0);
     	

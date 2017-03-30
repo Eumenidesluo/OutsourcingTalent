@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,9 @@ public class GroupController {
 			return JSON.toJSONString(result);
 		}
 		List<RelateGroupProjectBean> beanList = groupService.findRelatesByGroupId(groupId);
+		if (beanList == null) {
+			beanList = new ArrayList<RelateGroupProjectBean>();
+		}
 		result.put("status", StatusCode.SUCCESS);
 		result.put("relates", beanList);
 		return JSON.toJSONString(result);
@@ -175,13 +179,13 @@ public class GroupController {
 		}//µÇÂ¼ÑéÖ¤
     	
 		String groupId = request.getParameter("groupId");
-		String inviterId = request.getParameter("inviterId");
+		String email = request.getParameter("email");
 		
-		if (groupId == null || inviterId == null) {
+		if (groupId == null || email == null) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
 			return JSON.toJSONString(result);
 		}
-		if (groupService.inviteMember(Integer.parseInt(groupId), Integer.parseInt(inviterId))){
+		if (groupService.inviteMember(Integer.parseInt(groupId),email)){
 			result.put("status", StatusCode.SUCCESS);
 			return JSON.toJSONString(result);
 		}

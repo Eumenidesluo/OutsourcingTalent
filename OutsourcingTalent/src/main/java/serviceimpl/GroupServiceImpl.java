@@ -89,10 +89,14 @@ public class GroupServiceImpl implements GroupService{
 	}
 	
 	@Override
-	public Boolean inviteMember(Integer groupId, Integer inviteId) {
+	public Boolean inviteMember(Integer groupId, String email) {
+		UserEntity userEntity = userDao.findByEmail(email);
+		if (userEntity == null) {
+			return false;
+		}
 		RelateUserGroupEntity entity = new RelateUserGroupEntity();
 		entity.setGroupId(groupId);
-		entity.setUserId(inviteId);
+		entity.setUserId(userEntity.getId());
 		entity.setPlace(1);
 		if (ugRelateDao.addRelate(entity)<0) {
 			return false;
@@ -156,6 +160,9 @@ public class GroupServiceImpl implements GroupService{
 	public List<RelateGroupProjectBean> findRelatesByGroupId(Integer groupId) {
 		List<RelateGroupProjectBean> beanList = new ArrayList<>();
 		List<?> entityList = relateGPDao.findRelatesByGroupId(groupId);
+		if (entityList == null) {
+			return null;
+		}
 		for(Object o:entityList) {
 			RelateGroupProjectEntity entity = (RelateGroupProjectEntity)o;
 			ProjectEntity projectEntity = projectDao.findProjectByProjectId(entity.getProjectId());

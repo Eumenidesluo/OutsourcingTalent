@@ -78,7 +78,6 @@ public class NoticeController {
      * <p>参数说明:
      * <pre>
      * |名称              |类型         |是否必须   |默认值    |说明
-     * userId   	String 		Y    	 NULL  用户Id
      * number		Integer		Y		 2   	查询数量 -1:查询全部通知
      * </pre>
      * <p>返回数据:JSON
@@ -95,15 +94,10 @@ public class NoticeController {
 	@ResponseBody
 	public String query(HttpServletRequest request,HttpSession session){
 		Map<String, Object> result = new HashMap<>();
-		String personId = request.getParameter("userId");
+		Integer userId = (Integer)session.getAttribute("userId");
 		String number = request.getParameter("number");
-		if (personId == null || number == null) {
+		if ( number == null) {
 			result.put("status", StatusCode.PARAMETER_ERROR);
-			return JSON.toJSONString(result);
-		}
-		String userId = session.getAttribute("userId").toString();
-		if (userId == null||userId != personId) {
-			result.put("status", StatusCode.AUTHENTICATION_FAILED);
 			return JSON.toJSONString(result);
 		}
 		if (Integer.parseInt(number) == -1) {
